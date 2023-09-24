@@ -1,0 +1,6 @@
+node_modules/
+.idea/
+dist/
+private/env/**/settings.json
+workspace/
+.DS_Store
