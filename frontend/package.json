@@ -2,7 +2,7 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "start": "meteor run --settings private/env/staging/settings.json --exclude-archs web.browser.legacy,web.cordova"
+    "start": "meteor run --settings private/env/dev/settings.json --exclude-archs web.browser.legacy,web.cordova"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
