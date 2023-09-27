@@ -21,3 +21,6 @@ hot-module-replacement@0.5.3  # Update client in development without reloading t
 static-html@1.3.2             # Define static page content in .html files
 react-meteor-data       # React higher-order component for reactively tracking Meteor data
 quave:collections
+matb33:collection-hooks
+aldeed:collection2
+dburles:collection-helpers

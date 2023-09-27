@@ -1,4 +1,4 @@
-export const usefulDates = (collection) => {
+export const usefulDates = (collection) =>
   Object.assign({}, collection, {
     save(doc) {
       if (doc._id) {
@@ -21,4 +21,4 @@ export const usefulDates = (collection) => {
       )
     }
   })
-}
+
