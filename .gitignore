@@ -1,2 +1,11 @@
-node_modules/
-.idea/
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ProjetoPrototipagem/FileContentIndex
+/bin/Debug
+/obj
+/ProjetoPrototipagem/bin/Debug/net6.0
+/.vs/projeto-prototipagem/FileContentIndex
+/.vs
+/ProjetoPrototipagem/obj/Release/net6.0
