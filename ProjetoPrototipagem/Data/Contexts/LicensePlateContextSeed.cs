@@ -5,7 +5,7 @@ namespace ProjetoPrototipagem.Data.Contexts
 {
     public static class LicensePlateContextSeed
     {
-        public static void SeedAsync(LicensePlateContext context)
+        public static void SeedAsync(DatabaseContext context)
         {
             try
             {
@@ -19,22 +19,16 @@ namespace ProjetoPrototipagem.Data.Contexts
 
             if (!context.Drivers.Any())
             {
-                var InventoryItems = new List<LicensePlate>
+                var LicensePlates = new List<LicensePlate>
                 {
                     new LicensePlate
                     {
-                        Owner = 1,
-                        Driver = "123",
-                        Number = "123AA123"
                     },
                     new LicensePlate
                     {
-                        Owner = 2,
-                        Driver = "4321",
-                        Number = "73456A12"
                     }
                 };
-                context.Drivers.AddRange(InventoryItems);
+                context.LicensePlates.AddRange(LicensePlates);
                 context.SaveChanges();
             }
 
