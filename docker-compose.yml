@@ -10,25 +10,33 @@ services:
           context: .
           dockerfile: ProjetoPrototipagem/Dockerfile
         depends_on:
-            - ms-sql-server
-        environment:
-            - DB_HOST=ms-sql-server
-            - DB_NAME=ProjetoPrototipagem
-            - DB_SA_PASSWORD=ElGat@Vadi@
+            - mongo
         networks:
             - prototipagemNetwork
         
-   ms-sql-server:
-        container_name: prototipagemDb
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        environment:
-            - ACCEPT_EULA=Y
-            - SA_PASSWORD=ElGat@Vadi@
+   mongo:
+        restart: always
+        image: mongo
         ports:
-            - 1443:1433
+            - 27017:27017
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=admin
+            - MONGO_INITDB_ROOT_PASSWORD=123
+        networks:
+            - prototipagemNetwork  
+   
+   mongo-express:
+        container_name: mongo-express
+        image: mongo-express
+        depends_on:
+          - mongo
+        environment:
+          - ME_CONFIG_MONGODB_SERVER=mongo
+          - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+          - ME_CONFIG_MONGODB_ADMINPASSWORD=123
+          - ME_CONFIG_BASICAUTH_USERNAME=admin
+          - ME_CONFIG_BASICAUTH_PASSWORD=123
+        ports:
+          - '8081:8081'
         networks:
             - prototipagemNetwork
-            
-
-
-        

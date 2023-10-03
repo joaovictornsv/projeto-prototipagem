@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using ProjetoPrototipagem.Data;
-using ProjetoPrototipagem.Data.Contexts;
+using ProjetoPrototipagem.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,17 +11,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Encrypt=false";
-builder.Services.AddDbContext<DbContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddSingleton<DriverService>();
+builder.Services.AddSingleton<LicensePlateService>();
+builder.Services.AddSingleton<OwnerService>();
+
+
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseConfig"));
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+new MongoClient(builder.Configuration.GetValue<string>("DatabaseConfig:ConnectionString")));
+
 
 var app = builder.Build();
 
-
-
-DbInitializer.Seed(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

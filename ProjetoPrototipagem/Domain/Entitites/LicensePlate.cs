@@ -1,15 +1,21 @@
-﻿using ProjetoPrototipagem.Domain.Entitites.Common;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace ProjetoPrototipagem.Domain.Entitites
 {
-    public class LicensePlate : Base
+    public class LicensePlate
     {
-        [ForeignKey(nameof(Owner))]
-        public int OwnerId { get; set; }
-        public Driver Driver { get; set; }
-        public string Number { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
 
-        public virtual Owner Owner {get;set;}
+        [BsonElement("OwnerId")]
+        public string OwnerId { get; set; }
+
+        [BsonElement("DriverId")]
+        public string DriverId { get; set; }
+
+        [BsonElement("Number")]
+        public string Number { get; set; }
     }
 }
