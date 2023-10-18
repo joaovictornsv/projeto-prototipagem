@@ -7,15 +7,15 @@ namespace ProjetoPrototipagem.Domain.Entitites
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string _id { get; set; }
+        public string? id { get; set; }
 
         [BsonElement("OwnerId")]
-        public string OwnerId { get; set; }
+        public string? OwnerId { get; set; }
 
         [BsonElement("DriverId")]
-        public string DriverId { get; set; }
+        public string? DriverId { get; set; }
 
         [BsonElement("Number")]
-        public string Number { get; set; }
+        public string? Number { get; set; }
     }
 }

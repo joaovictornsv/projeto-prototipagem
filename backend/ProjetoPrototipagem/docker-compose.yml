@@ -31,7 +31,7 @@ services:
         depends_on:
           - mongo
         environment:
-          - ME_CONFIG_MONGODB_SERVER=mongo
+          - ME_CONFIG_MONGODB_SERVER=PrototipagemDb
           - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
           - ME_CONFIG_MONGODB_ADMINPASSWORD=123
           - ME_CONFIG_BASICAUTH_USERNAME=admin

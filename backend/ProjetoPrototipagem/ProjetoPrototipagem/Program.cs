@@ -13,7 +13,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<DriverService>();
 builder.Services.AddSingleton<LicensePlateService>();
-builder.Services.AddSingleton<OwnerService>();
 
 
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseConfig"));

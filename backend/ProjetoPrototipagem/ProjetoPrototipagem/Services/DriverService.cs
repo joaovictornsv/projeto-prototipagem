@@ -22,12 +22,12 @@ namespace ProjetoPrototipagem.Services
         public async Task<List<Driver>> GetDriversAsync() =>
             await _colection.Find(x => true).ToListAsync();
         public async Task<Driver> GetDriver(string id) =>
-            await _colection.Find(x => x._id == id).FirstOrDefaultAsync();
+            await _colection.Find(x => x.id == id).FirstOrDefaultAsync();
         public async Task CreateDriverAsync(Driver driver) =>
             await _colection.InsertOneAsync(driver);
         public async Task UpdateDriverAsync(string id, Driver driver) =>
-            await _colection.ReplaceOneAsync(x => x._id == id, driver);
+            await _colection.ReplaceOneAsync(x => x.id == id, driver);
         public async Task RemoveDriverAsync(string id) =>
-            await _colection.DeleteOneAsync(x => x._id == id);
+            await _colection.DeleteOneAsync(x => x.id == id);
     }
 }

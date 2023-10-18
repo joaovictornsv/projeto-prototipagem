@@ -20,14 +20,12 @@ namespace ProjetoPrototipagem.Data.Seeds
             {
                 new Driver() 
                 {
-                    _id = "1",
                      Name = "Thales",
                      DocumentNumber = "123",
                 },
                 
                 new Driver() 
                 {
-                    _id = "2",
                      Name = "Luiz",
                      DocumentNumber = "4321",
                 }
