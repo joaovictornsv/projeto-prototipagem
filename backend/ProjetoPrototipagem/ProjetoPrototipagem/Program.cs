@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using ProjetoPrototipagem.Data;
 using ProjetoPrototipagem.Services;
@@ -12,7 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<DriverService>();
+builder.Services.AddSingleton<InvoiceService>();
 builder.Services.AddSingleton<LicensePlateService>();
+builder.Services.AddSingleton<WeighingService>();
+builder.Services.AddSingleton<AuxService>();
 
 
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseConfig"));

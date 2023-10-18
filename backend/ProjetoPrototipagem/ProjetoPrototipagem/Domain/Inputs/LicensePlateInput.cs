@@ -1,21 +1,19 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace ProjetoPrototipagem.Domain.Entitites
 {
-    public class LicensePlate
+    public class LicensePlateInput
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? id { get; set; }
-
-        [BsonElement("Number")]
+        [JsonProperty("number")]
         public string? Number { get; set; }
 
-        [BsonElement("VehicleModel")]
+        [JsonProperty("vehicle_model")]
         public string? VehicleModel { get; set; }
 
-        [BsonElement("VehicleYear")]
+        [JsonProperty("vehicle_year")]
         public string? VehicleYear { get; set; }
     }
 }

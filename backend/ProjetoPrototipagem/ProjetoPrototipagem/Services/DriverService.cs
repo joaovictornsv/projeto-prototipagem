@@ -23,8 +23,11 @@ namespace ProjetoPrototipagem.Services
             await _colection.Find(x => true).ToListAsync();
         public async Task<Driver> GetDriver(string id) =>
             await _colection.Find(x => x.id == id).FirstOrDefaultAsync();
-        public async Task CreateDriverAsync(Driver driver) =>
+        public async Task<string?> CreateDriverAsync(Driver driver)
+        {
             await _colection.InsertOneAsync(driver);
+            return driver.id;
+        }
         public async Task UpdateDriverAsync(string id, Driver driver) =>
             await _colection.ReplaceOneAsync(x => x.id == id, driver);
         public async Task RemoveDriverAsync(string id) =>

@@ -20,8 +20,11 @@ public class LicensePlateService
         await _colection.Find(x => true).ToListAsync();
     public async Task<LicensePlate> GetLicensePlate(string id) =>
         await _colection.Find(x => x.id == id).FirstOrDefaultAsync();
-    public async Task CreateLicensePlateAsync(LicensePlate licensePlate) =>
+    public async Task<string?> CreateLicensePlateAsync(LicensePlate licensePlate)
+    {
         await _colection.InsertOneAsync(licensePlate);
+        return licensePlate.id;
+    }
     public async Task UpdateLicensePlateAsync(string id, LicensePlate licensePlate) =>
         await _colection.ReplaceOneAsync(x => x.id == id, licensePlate);
     public async Task RemoveLicensePlateAsync(string id) =>
