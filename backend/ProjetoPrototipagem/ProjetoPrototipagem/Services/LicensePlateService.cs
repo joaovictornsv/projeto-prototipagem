@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using ProjetoPrototipagem.Data;
 using ProjetoPrototipagem.Domain.Entitites;
@@ -20,10 +21,23 @@ public class LicensePlateService
         await _colection.Find(x => true).ToListAsync();
     public async Task<LicensePlate> GetLicensePlate(string id) =>
         await _colection.Find(x => x.id == id).FirstOrDefaultAsync();
-    public async Task<string?> CreateLicensePlateAsync(LicensePlate licensePlate)
+
+    public async Task<LicensePlate> GetOrCreateLicensePlateAsync(LicensePlate licensePlate)
+    {
+        var licensePlateGet = await GetLicensePlateByNumberAsync(licensePlate.Number);
+        if (licensePlate is null){
+            licensePlateGet = await CreateLicensePlateAsync(licensePlate);
+        };
+        return licensePlateGet;
+    }
+
+    public async Task<LicensePlate?> GetLicensePlateByNumberAsync(string number) =>
+        await _colection.Find(x => x.Number == number).FirstOrDefaultAsync();
+
+    public async Task<LicensePlate?> CreateLicensePlateAsync(LicensePlate licensePlate)
     {
         await _colection.InsertOneAsync(licensePlate);
-        return licensePlate.id;
+        return licensePlate;
     }
     public async Task UpdateLicensePlateAsync(string id, LicensePlate licensePlate) =>
         await _colection.ReplaceOneAsync(x => x.id == id, licensePlate);

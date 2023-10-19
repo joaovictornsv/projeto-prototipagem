@@ -5,7 +5,6 @@ namespace ProjetoPrototipagem.Domain.Entitites
 {
     public class Invoice
     {
-
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? id { get; set; }
