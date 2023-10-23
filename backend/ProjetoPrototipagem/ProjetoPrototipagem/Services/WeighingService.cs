@@ -22,8 +22,8 @@ namespace ProjetoPrototipagem.Services
             await _colection.Find(x => true).ToListAsync();
         public async Task<Weighing> GetWeighing(string id) =>
             await _colection.Find(x => x.id == id).FirstOrDefaultAsync();
-        public async Task<bool> VerifyPlateNumberRegistry(string id) =>
-            await _colection.Find(x => x.LicensePlateId == id).FirstOrDefaultAsync() != null;
+        public async Task<bool> VerifyPlateNumberRegistry(string plateId) =>
+            await _colection.Find(x => x.LicensePlateId == plateId).FirstOrDefaultAsync() != null;
         public async Task CreateWeighingAsync(Weighing weighing) =>
             await _colection.InsertOneAsync(weighing);
         public async Task UpdateWeighingAsync(string id, Weighing weighing) =>

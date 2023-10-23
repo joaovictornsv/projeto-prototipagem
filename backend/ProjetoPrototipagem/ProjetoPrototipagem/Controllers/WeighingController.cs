@@ -44,20 +44,20 @@ namespace ProjetoPrototipagem.Controllers
         [HttpPost("create_weighing")]
         public async Task PostCreateWeighing(CreateWeighingInput weighing)
         {
-            var driverId = await _driverService.CreateDriverAsync(new Driver
+            var driver = await _driverService.GetOrCreateDriverAsync(new Driver
             {
                 Name = weighing.Driver.Name,
                 DocumentNumber = weighing.Driver.DocumentNumber
             });
 
-            var licensePlateId = await _licensePlateService.CreateLicensePlateAsync(new LicensePlate
+            var licensePlate= await _licensePlateService.GetOrCreateLicensePlateAsync(new LicensePlate
             {
                 Number = weighing.LicensePlate.Number,
                 VehicleModel = weighing.LicensePlate.VehicleModel,
                 VehicleYear = weighing.LicensePlate.VehicleYear
             });
 
-            var invoiceId = await _invoiceService.CreateInvoiceAsync(new Invoice
+            var invoice = await _invoiceService.GetOrCreateInvoiceAsync(new Invoice
             {
                 CompanyName = weighing.Invoice.CompanyName,
                 LoadWeight = weighing.Invoice.LoadWeight,
@@ -67,12 +67,11 @@ namespace ProjetoPrototipagem.Controllers
 
             await _weighingService.CreateWeighingAsync(new Weighing
             {
-                DriverId = driverId,
-                LicensePlateId = licensePlateId,
-                InvoiceId = invoiceId,
+                DriverId = driver.id,
+                LicensePlateId = licensePlate.id,
+                InvoiceId = invoice.id,
                 Status = StatusEnum.PENDING
             });
         }
-
     }
 }
