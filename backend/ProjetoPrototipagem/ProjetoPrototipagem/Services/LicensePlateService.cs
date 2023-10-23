@@ -25,7 +25,7 @@ public class LicensePlateService
     public async Task<LicensePlate> GetOrCreateLicensePlateAsync(LicensePlate licensePlate)
     {
         var licensePlateGet = await GetLicensePlateByNumberAsync(licensePlate.Number);
-        if (licensePlate is null){
+        if (licensePlateGet is null){
             licensePlateGet = await CreateLicensePlateAsync(licensePlate);
         };
         return licensePlateGet;
