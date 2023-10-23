@@ -10,12 +10,12 @@ COPY ["ProjetoPrototipagem/ProjetoPrototipagem.csproj", "ProjetoPrototipagem/"]
 RUN dotnet restore "ProjetoPrototipagem/ProjetoPrototipagem.csproj"
 COPY . .
 WORKDIR "/src/ProjetoPrototipagem"
-RUN dotnet build "ProjetoPrototipagem.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "ProjetoPrototipagem.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM publish AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN dotnet dev-certs https
 ENTRYPOINT ["dotnet", "ProjetoPrototipagem.dll"]

@@ -1,0 +1,10 @@
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/ProjetoPrototipagem/.vs
+/ProjetoPrototipagem/bin/Debug
+/ProjetoPrototipagem/obj
+/ProjetoPrototipagem/ProjetoPrototipagem/bin/Debug/net6.0
+/ProjetoPrototipagem/ProjetoPrototipagem/obj
