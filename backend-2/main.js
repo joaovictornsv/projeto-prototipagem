@@ -3,6 +3,10 @@ import {DatabaseName, getDatabase} from "./db.js";
 
 const app = express()
 
+app.get('/', async (req, res) => {
+  res.json({ ok: true })
+})
+
 app.get('/drivers', async (req, res) => {
   const db = await getDatabase(DatabaseName)
   const users = await db.collection('driverDb').find().toArray()
