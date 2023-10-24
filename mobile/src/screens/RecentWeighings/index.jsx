@@ -35,7 +35,6 @@ export default function RecentWeighingsScreen({ navigation }) {
     setRefreshing(true)
     api.get('weighings')
       .then(({data}) => {
-        console.log(data)
         setWeighings(data)
         setRefreshing(false)
       })
