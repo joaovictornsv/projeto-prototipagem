@@ -16,7 +16,7 @@ app.get('/drivers', async (req, res) => {
 
 app.get('/weighings', async (req, res) => {
   const db = await getDatabase(DatabaseName)
-  const weighings =  await db.collection('weighingsDb').find().toArray()
+  const weighings =  await db.collection('weighingDb').find().toArray()
 
   res.json(weighings)
 })
