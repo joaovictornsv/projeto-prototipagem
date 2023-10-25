@@ -45,7 +45,7 @@ app.get('/verify-weighing/:number', async (req, res) => {
 app.get('/license-plate-info', async (req, res) => {
   res.json({
     model: 'Fiat Uno',
-    year: 2023
+    year: '2023'
   })
 })
 
@@ -53,7 +53,7 @@ app.get('/invoice-info', async (req, res) => {
   res.json({
     company: 'Company X',
     loadItems: ["Casaco","Tecido"],
-    loadWeight: 100
+    loadWeight: '100'
   })
 })
 
