@@ -1,6 +1,6 @@
 import express from 'express'
 import {DatabaseName, getDatabase} from "./db.js";
-import {CreateWeighing} from './collections/weighingCollection.js'
+import {CreateWeighing, verifyWeight} from './collections/weighingCollection.js'
 
 const app = express()
 app.use(express.json())
@@ -38,13 +38,22 @@ app.get('/driver/:name', async (req, res) => {
   res.json(driver)
 })
 
-app.get('/verify-weighing/:number', async (req, res) => {
+app.get('/verify-plate/:number', async (req, res) => {
   const {number} = req.params
   const collection = await getCollection(Collections.WEIGHINGS)
   const licensePlate = await collection.findOne({"license_plate_number": number})
 
   res.json({
     allowed: licensePlate 
+  })
+})     
+
+app.post('/verify-weight/', async (req, res) => {
+  const collection = await getCollection(Collections.WEIGHINGS)
+  const weighing = await collection.findOne({"_id": req.weighing_id})
+
+  res.json({
+    check: verifyWeight(weighing, req.weight)
   })
 })     
 
