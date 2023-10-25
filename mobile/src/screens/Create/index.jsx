@@ -1,10 +1,28 @@
 import {View, Text} from 'react-native';
 import { Button, Input, ScrollView, } from 'native-base';
 import {Controller, useForm} from 'react-hook-form';
+import {getLicensePlateInfo, verifyInvoiceNumber} from "../../../utils/api";
 
 export default function CreateScreen({ navigation }) {
-  const { control } = useForm();
+  const { control, setValue } = useForm();
 
+  const onVerifyLicensePlate = () => {
+    getLicensePlateInfo()
+      .then((data) => {
+        setValue('vehicle_model', data.model)
+        setValue('vehicle_year', data.year)
+      })
+      .catch((e) => console.error(e))
+  }
+
+  const onVerifyInvoiceNumber = () => {
+    verifyInvoiceNumber()
+      .then((data) => {
+        setValue('load_weigh', data.loadWeight)
+        setValue('company_name', data.company)
+      })
+      .catch((e) => console.error(e))
+  }
   return (
     <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', width: '100%', backgroundColor: '#F9F9F9' }}>
       <View style={{width: '80%', marginTop: 100, marginBottom: 70}}>
@@ -91,7 +109,7 @@ export default function CreateScreen({ navigation }) {
                   name="license_plate_number"
                   defaultValue=""
                 />
-                <Button style={{ flexGrow: 1, backgroundColor: '#7286D3'}} >
+                <Button style={{ flexGrow: 1, backgroundColor: '#7286D3'}} onPress={onVerifyLicensePlate}>
                   <Text style={{color: '#FBFEFF', fontWeight: 'bold'}}>Verificar</Text>
                 </Button>
               </View>
@@ -101,7 +119,7 @@ export default function CreateScreen({ navigation }) {
                   render={({ field }) => (
                     <Input
                       placeholder="Modelo do veículo"
-                      isDisabled={true}
+                      isReadOnly={true}
                       value={field.value}
                       variant="unstyled"
                       w="50%"
@@ -124,7 +142,7 @@ export default function CreateScreen({ navigation }) {
                     <Input
                       placeholder="Ano do veículo"
                       onBlur={field.onBlur}
-                      isDisabled={true}
+                      isReadOnly={true}
                       value={field.value}
                       variant="unstyled"
                       w="50%"
@@ -172,7 +190,7 @@ export default function CreateScreen({ navigation }) {
                   name="invoice_number"
                   defaultValue=""
                 />
-                <Button style={{ flexGrow: 1, backgroundColor: '#7286D3'}} >
+                <Button style={{ flexGrow: 1, backgroundColor: '#7286D3'}} onPress={onVerifyInvoiceNumber}>
                   <Text style={{color: '#FBFEFF', fontWeight: 'bold'}}>Verificar</Text>
                 </Button>
               </View>
@@ -184,7 +202,7 @@ export default function CreateScreen({ navigation }) {
                     <Input
                       placeholder="Pesagem"
                       onBlur={field.onBlur}
-                      isDisabled={true}
+                      isReadOnly={true}
                       value={field.value}
                       variant="unstyled"
                       w="50%"
@@ -207,7 +225,7 @@ export default function CreateScreen({ navigation }) {
                     <Input
                       placeholder="Emissor"
                       onBlur={field.onBlur}
-                      isDisabled={true}
+                      isReadOnly={true}
                       value={field.value}
                       variant="unstyled"
                       w="50%"
