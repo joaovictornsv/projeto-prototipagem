@@ -1,5 +1,4 @@
-import {View, Text} from 'react-native';
-import { Button, Input, ScrollView, } from 'native-base';
+import {View, Text, Button, ScrollView, TextInput as Input} from 'react-native';
 import {Controller, useForm} from 'react-hook-form';
 import {getLicensePlateInfo, verifyInvoiceNumber} from "../../../utils/api";
 
@@ -109,9 +108,7 @@ export default function CreateScreen({ navigation }) {
                   name="license_plate_number"
                   defaultValue=""
                 />
-                <Button style={{ flexGrow: 1, backgroundColor: '#7286D3'}} onPress={onVerifyLicensePlate}>
-                  <Text style={{color: '#FBFEFF', fontWeight: 'bold'}}>Verificar</Text>
-                </Button>
+                <Button title="Verificar" style={{ flexGrow: 1, backgroundColor: '#7286D3'}} onPress={onVerifyLicensePlate}/>
               </View>
               <View style={{ flex: 1, flexDirection:'row', gap: 4}}>
                 <Controller
@@ -190,9 +187,7 @@ export default function CreateScreen({ navigation }) {
                   name="invoice_number"
                   defaultValue=""
                 />
-                <Button style={{ flexGrow: 1, backgroundColor: '#7286D3'}} onPress={onVerifyInvoiceNumber}>
-                  <Text style={{color: '#FBFEFF', fontWeight: 'bold'}}>Verificar</Text>
-                </Button>
+                <Button title="Verificar" style={{ flexGrow: 1, backgroundColor: '#7286D3'}} onPress={onVerifyInvoiceNumber} />
               </View>
 
               <View style={{ flex: 1, flexDirection:'row', gap: 4}}>
@@ -246,14 +241,8 @@ export default function CreateScreen({ navigation }) {
             </View>
 
           </View>
-          <View style={{marginTop: 8 , flexDirection:"column", gap: 16, justifyContent: 'space-between', alignItems: 'center',width: '100%'}}>
-            <Button width='100%' style={{backgroundColor: '#7286D3'}} >
-              <Text style={{color: '#FBFEFF', fontWeight: 'bold'}}>Salvar</Text>
-            </Button>
-          </View>
-          <Button onPress={() => navigation.navigate('Access')} width='100%' style={{backgroundColor: '#0C0F14', marginTop: 24}} >
-            <Text style={{color: '#FFF', fontWeight: 'bold'}}>Voltar</Text>
-          </Button>
+          <Button title="Salvar" width='100%' style={{backgroundColor: '#7286D3'}} />
+          <Button title="Voltar" onPress={() => navigation.navigate('Access')} width='100%' style={{backgroundColor: '#0C0F14', marginTop: 24}} />
         </ScrollView>
 
       </View>

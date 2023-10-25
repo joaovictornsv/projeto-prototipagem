@@ -1,6 +1,5 @@
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {FlatList, RefreshControl, Text, View, Button} from 'react-native';
 import { styles } from './styles'
-import {Button} from "native-base";
 import {useEffect, useState} from "react";
 import {api} from "../../../utils/api";
 
@@ -64,9 +63,7 @@ export default function RecentWeighingsScreen({ navigation }) {
           renderItem={({item}) => renderItem(item)}
           keyExtractor={item => item._id}
         />
-        <Button onPress={() => navigation.navigate('Create')} padding="3" style={{backgroundColor: '#0C0F14', marginTop: 24}} >
-          <Text style={{color: '#FFF', fontWeight: 'bold'}}>Nova listagem</Text>
-        </Button>
+        <Button title="Nova pesagem" onPress={() => navigation.navigate('Create')} padding="3" style={{backgroundColor: '#0C0F14', marginTop: 24}} />
       </View>
     </View>
   )
