@@ -1,8 +1,10 @@
 import express from 'express'
+import cors from 'cors'
 import {DatabaseName, getDatabase} from "./db.js";
 import {CreateWeighing, verifyWeight} from './collections/weighingCollection.js'
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
@@ -44,9 +46,9 @@ app.get('/verify-plate/:number', async (req, res) => {
   const licensePlate = await collection.findOne({"license_plate_number": number})
 
   res.json({
-    allowed: licensePlate 
+    allowed: licensePlate
   })
-})     
+})
 
 app.post('/verify-weight/', async (req, res) => {
   const collection = await getCollection(Collections.WEIGHINGS)
