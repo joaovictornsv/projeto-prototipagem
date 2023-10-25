@@ -1,7 +1,10 @@
 import express from 'express'
 import {DatabaseName, getDatabase} from "./db.js";
+import { BSON } from 'mongodb';
 
 const app = express()
+app.use(express.json())
+app.use(express.urlencoded({ extended: true}))
 
 const Collections = {
   DRIVERS: 'driverDb',
@@ -19,28 +22,31 @@ app.get('/', async (req, res) => {
   res.json({ ok: true })
 })
 
-app.get('/drivers', async (req, res) => {c
+app.get('/drivers', async (req, res) => {
   const collection = await getCollection(Collections.DRIVERS)
   const drivers = await collection.find().toArray()
 
   res.json(drivers)
 })
 
-app.get('/verify-license-plate/:number', async (req, res) => {
-  const {number} = req.params
+app.get('/driver/:name', async (req, res) => {
+  const {name} = req.params
 
-  res.json({
-    allowed: number === 'ABC1D34'
-  })
+  const collection = await getCollection(Collections.DRIVERS)
+  const driver = await collection.findOne({"name": name})
+
+  res.json(driver)
 })
 
 app.get('/verify-weighing/:number', async (req, res) => {
   const {number} = req.params
+  const collection = await getCollection(Collections.WEIGHINGS)
+  const licensePlate = await collection.findOne({"license_plate_number": number})
 
   res.json({
-    allowed: number === 'ABC1D34'
+    allowed: licensePlate 
   })
-})
+})     
 
 app.get('/license-plate-info', async (req, res) => {
   res.json({
@@ -64,5 +70,42 @@ app.get('/weighings', async (req, res) => {
 
   res.json(weighings)
 })
+
+app.post('/create/weighing', async (req, res) => {
+  const collectionDriver = await getCollection(Collections.DRIVERS)
+  const driver = await collectionDriver.insertOne({
+    name: req.body.driver.name,
+    document_number: req.body.driver.document_number
+  })
+
+  const collectionLicensePlate = await getCollection(Collections.LICENSE_PLATES)
+  const licensePlate = await collectionLicensePlate.insertOne({
+    number: req.body.license_plate.number,
+    vehicle_year: req.body.license_plate.vehicle_year,
+    vehicle_model: req.body.license_plate.vehicle_model
+  })
+
+  const collectionInvoices = await getCollection(Collections.INVOICES)
+  const invoice = await collectionInvoices.insertOne({
+    company_name: req.body.invoice.company_name,
+    load_weight: req.body.invoice.load_weight,
+    load_items: req.body.invoice.load_items,
+    amount: req.body.invoice.amount
+  })
+
+  const collectionWeighings = await getCollection(Collections.WEIGHINGS)
+
+  const licensePlateNumber = await collectionLicensePlate.findOne(licensePlate.insertedId)
+
+  const weighing = await collectionWeighings.insertOne({
+    driver_id: driver.insertedId,
+    license_plate_number: licensePlateNumber.number,
+    invoice_id: invoice.insertedId,
+    status: "pending"
+  })
+
+  res.json(weighing)
+})
+
 
 app.listen(3000, () => console.log('Server running on port 3000'))
