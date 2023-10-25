@@ -46,8 +46,10 @@ export async function getOrCreateWeighing(weighing){
 }
 
 export async function verifyWeight(weighing, weight){
-    invoiceWeight = getOrCreateInvoice({barcode: weighing.invoice_barcode}).load_weight
+    var invoiceWeight = await getOrCreateInvoice({"barcode": weighing.invoice_barcode})
+    if(((invoiceWeight.load_weight + invoiceWeight.load_weight * 0.05) >= weight) && (weight >= (invoiceWeight.load_weight - invoiceWeight.load_weight * 0.05))){
 
-    if((invoiceWeight + invoiceWeight * 0.05) >= weight && weight >= (invoiceWeight - invoiceWeight * 0.05)) return true
+        return true
+    }
     return false
 }

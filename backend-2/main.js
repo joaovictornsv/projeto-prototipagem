@@ -52,10 +52,10 @@ app.get('/verify-plate/:number', async (req, res) => {
 
 app.post('/verify-weight/', async (req, res) => {
   const collection = await getCollection(Collections.WEIGHINGS)
-  const weighing = await collection.findOne({"_id": req.weighing_id})
+  const weighing = await collection.findOne(req.weighing_id)
 
   res.json({
-    check: verifyWeight(weighing, req.weight)
+    check: await verifyWeight(weighing, req.body.weight)
   })
 })     
 
