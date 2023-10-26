@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import {DatabaseName, getDatabase} from "./db.js";
-import {CreateWeighing, verifyWeight} from './collections/weighingCollection.js'
+import {CreateWeighing, verifyWeight, WeighingStatusEnum} from './collections/weighingCollection.js'
 
 const app = express()
 app.use(cors())
@@ -42,22 +42,34 @@ app.get('/driver/:name', async (req, res) => {
 
 app.get('/verify-plate/:number', async (req, res) => {
   const {number} = req.params
-  const collection = await getCollection(Collections.WEIGHINGS)
-  const licensePlate = await collection.findOne({"license_plate_number": number})
+  const licensePlatesCollection = await getCollection(Collections.WEIGHINGS)
+  const licensePlate = await licensePlatesCollection.findOne({
+    license_plate_number: number
+  })
+
+  const weighingsCollection = await getCollection(Collections.WEIGHINGS)
+  const weighing = await weighingsCollection.findOne({
+    license_plate_number: number,
+    status: WeighingStatusEnum.PENDING
+  }, { _id: -1 })
 
   res.json({
-    allowed: licensePlate
+    allowed: !!(licensePlate && !!weighing)
   })
 })
 
-app.post('/verify-weight/', async (req, res) => {
+app.post('/verify-weight/:weighing_id', async (req, res) => {
+  const {weighing_id} = req._params
+  const { measuredWeight } = req.body
+
   const collection = await getCollection(Collections.WEIGHINGS)
-  const weighing = await collection.findOne(req.weighing_id)
+  const weighing = await collection.findOne({"_id": weighing_id})
+  const allowed = await verifyWeight(weighing, measuredWeight)
 
   res.json({
-    check: await verifyWeight(weighing, req.body.weight)
+    allowed
   })
-})     
+})
 
 app.get('/license-plate-info', async (req, res) => {
   res.json({
@@ -83,7 +95,8 @@ app.get('/weighings', async (req, res) => {
 })
 
 app.post('/create/weighing', async (req, res) => {
-  res.json(CreateWeighing(req))
+  const response = await CreateWeighing(req)
+  res.json(response)
 })
 
 

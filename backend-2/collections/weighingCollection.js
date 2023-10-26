@@ -6,20 +6,25 @@ import getOrCreateDriver from "./driverCollection.js"
 
 const collectionWeighings = await getCollection('weighingDb')
 
+export const WeighingStatusEnum = {
+  PENDING: 'PENDING',
+  DONE: 'DONE'
+}
+
 export async function CreateWeighing(req){
 
-  getOrCreateDriver({
+  const driver = await getOrCreateDriver({
     name: req.body.driver.name,
     document_number: req.body.driver.document_number
   })
 
-  getOrCreateLicensePlate({
+  const licensePlate = await getOrCreateLicensePlate({
     number: req.body.license_plate.number,
     vehicle_year: req.body.license_plate.vehicle_year,
     vehicle_model: req.body.license_plate.vehicle_model
   })
 
-  getOrCreateInvoice({
+  const invoice = await getOrCreateInvoice({
     company_name: req.body.invoice.company_name,
     load_weight: req.body.invoice.load_weight,
     load_items: req.body.invoice.load_items,
@@ -31,7 +36,15 @@ export async function CreateWeighing(req){
     driver_document_number: req.body.driver.document_number,
     license_plate_number: req.body.license_plate.number,
     invoice_barcode: req.body.invoice.barcode,
-    status: "pending"
+    status: WeighingStatusEnum.PENDING,
+    driver_id: driver._id,
+    license_plate_id: licensePlate._id,
+    invoice_id: invoice._id,
+    driver_name: req.body.driver.name,
+    company: req.body.invoice.company_name,
+    load_weight: req.body.invoice.load_weight,
+    amount: req.body.invoice.amount,
+    createdAt: new Date(),
   }
 
   return await getOrCreateWeighing(weighing)
@@ -46,10 +59,11 @@ export async function getOrCreateWeighing(weighing){
 }
 
 export async function verifyWeight(weighing, weight){
-    var invoiceWeight = await getOrCreateInvoice({"barcode": weighing.invoice_barcode})
-    if(((invoiceWeight.load_weight + invoiceWeight.load_weight * 0.05) >= weight) && (weight >= (invoiceWeight.load_weight - invoiceWeight.load_weight * 0.05))){
+    const invoiceWeight = getOrCreateInvoice({barcode: weighing.invoice_barcode}).load_weight
 
-        return true
-    }
-    return false
+    const tolerance = 0.05
+    const errorMargin = invoiceWeight * tolerance
+
+    const diff = Math.abs(weight - invoiceWeight)
+    return diff <= errorMargin
 }
