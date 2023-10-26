@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import {DatabaseName, getDatabase} from "./db.js";
 import {CreateWeighing, verifyWeight, WeighingStatusEnum} from './collections/weighingCollection.js'
+import { faker } from '@faker-js/faker';
 
 const app = express()
 app.use(cors())
@@ -78,17 +79,19 @@ app.get('/verify-weight/:weighing_id', async (req, res) => {
 
 app.get('/license-plate-info', async (req, res) => {
   res.json({
-    model: 'Fiat Uno',
-    year: '2023'
+    model: faker.vehicle.vehicle(),
+    year: `${faker.date.past().getFullYear()}`
   })
 })
 
+const amountToCents = (amount) => amount * 100
+
 app.get('/invoice-info', async (req, res) => {
   res.json({
-    company: 'Company X',
-    loadItems: ["Casaco","Tecido"],
-    loadWeight: '100',
-    amount: 2000 * 100
+    company: faker.company.name(),
+    loadItems: [faker.commerce.productName()],
+    loadWeight: `${faker.number.int({ min: 300, max: 15_000 })}`,
+    amount: Number(faker.finance.amount({ min: amountToCents(1_000), max: amountToCents(20_000) }))
   })
 })
 
