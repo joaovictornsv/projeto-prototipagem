@@ -1,6 +1,6 @@
 import { getCollection } from "../db.js"
 import getOrCreateInvoice from "./invoiceCollection.js"
-import {getLicensePlate, getOrCreateLicensePlate} from "./licensePlateCollection.js"
+import {getOrCreateLicensePlate} from "./licensePlateCollection.js"
 import getOrCreateDriver from "./driverCollection.js"
 
 
@@ -37,9 +37,9 @@ export async function CreateWeighing(req){
     license_plate_number: req.body.license_plate.number,
     invoice_barcode: req.body.invoice.barcode,
     status: WeighingStatusEnum.PENDING,
-    driver_id: driver._id,
-    license_plate_id: licensePlate._id,
-    invoice_id: invoice._id,
+    driver_id: driver.insertedId,
+    license_plate_id: licensePlate.insertedId,
+    invoice_id: invoice.insertedId,
     driver_name: req.body.driver.name,
     company: req.body.invoice.company_name,
     load_weight: req.body.invoice.load_weight,

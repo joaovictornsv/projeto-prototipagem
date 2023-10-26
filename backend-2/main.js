@@ -82,7 +82,8 @@ app.get('/invoice-info', async (req, res) => {
   res.json({
     company: 'Company X',
     loadItems: ["Casaco","Tecido"],
-    loadWeight: '100'
+    loadWeight: '100',
+    amount: 2000 * 100
   })
 })
 
