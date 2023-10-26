@@ -65,7 +65,7 @@ app.get('/verify-plate/:number', async (req, res) => {
 })
 
 app.get('/verify-weight/:weighing_id', async (req, res) => {
-  const {weighing_id} = req._params
+  const {weighing_id} = req.params
   const { measuredWeight } = req.body
 
   const collection = await getCollection(Collections.WEIGHINGS)
