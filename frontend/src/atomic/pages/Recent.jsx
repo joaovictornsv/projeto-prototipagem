@@ -6,6 +6,17 @@ import {useEffect, useState} from "react";
 import {getRecentWeighings} from "../../utils/api.js";
 import moment from 'moment';
 
+export const WeighingStatusLabel = {
+  PENDING: {
+    label: 'Em andamento',
+    color: 'text-yellow-300'
+  },
+  DONE: {
+    label: 'Concluída',
+    color: 'text-teal-300'
+  }
+}
+
 export const Recent = () => {
   const navigate = useNavigate()
   const [weighings, setWeighings] = useState([])
@@ -68,8 +79,11 @@ export const Recent = () => {
                   </span>
                 </div>
                 <div className="flex items-end flex-col gap-2">
-                   <span className="opacity-80">
+                  <span className="opacity-80">
                     {moment(weighing.createdAt).format('DD MMMM YY')}
+                  </span>
+                  <span className={WeighingStatusLabel[weighing.status].color}>
+                    {WeighingStatusLabel[weighing.status].label}
                   </span>
                 </div>
               </div>
