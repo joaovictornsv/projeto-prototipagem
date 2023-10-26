@@ -1,11 +1,14 @@
 import { MongoClient } from 'mongodb'
+import {configDotenv} from "dotenv";
+
+configDotenv()
 
 // Connection URL
-const url = 'mongodb+srv://root:root@cluster0.gqtpff3.mongodb.net/?retryWrites=true&w=majority';
+const url = process.env.MONGO_CONNECTION_URL;
 const client = new MongoClient(url);
 
 // Database Name
-export const DatabaseName = 'PrototipagemDb';
+export const DatabaseName = process.env.DB_NAME;
 
 export const getDatabase = async (dbName) => {
   await client.connect();
