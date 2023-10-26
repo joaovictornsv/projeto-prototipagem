@@ -77,7 +77,7 @@ app.get('/invoice-info', async (req, res) => {
 
 app.get('/weighings', async (req, res) => {
   const collection = await getCollection(Collections.DRIVERS)
-  const weighings =  await collection.find().toArray()
+  const weighings =  await collection.find().sort({_id:1}).limit(10).toArray();
 
   res.json(weighings)
 })
