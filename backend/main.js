@@ -112,7 +112,7 @@ app.put('/finalize/weighing/:weighing_id',async (req, res) => {
   const {weighing_id}= req.params
 
   const collection = await getCollection(Collections.WEIGHINGS)
-  const response =  await collection.updateOne(weighing_id, {
+  const response =  await collection.updateOne({_id: weighing_id}, {
     status: WeighingStatusEnum.DONE
   }, {})
 
