@@ -119,5 +119,4 @@ app.put('/finalize/weighing/:weighing_id',async (req, res) => {
   res.json(response)
 })
 
-
 app.listen(3000, () => console.log('Server running on port 3000'))

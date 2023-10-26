@@ -60,6 +60,9 @@ export async function getOrCreateWeighing(weighing){
 }
 
 export async function verifyWeight(weighing, weight){
+    if (!weighing) {
+      return false
+    }
     const invoiceWeight = Number(getOrCreateInvoice({barcode: weighing.invoice_barcode}).load_weight)
 
     const tolerance = 0.05
