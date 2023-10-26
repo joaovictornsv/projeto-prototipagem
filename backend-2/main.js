@@ -53,12 +53,17 @@ app.get('/verify-plate/:number', async (req, res) => {
     status: WeighingStatusEnum.PENDING
   }, { _id: -1 })
 
+  const allowed = !!(licensePlate && !!weighing)
+
   res.json({
-    allowed: !!(licensePlate && !!weighing)
+    allowed,
+    ...(allowed && {
+      weighing_id: weighing._id
+    })
   })
 })
 
-app.post('/verify-weight/:weighing_id', async (req, res) => {
+app.get('/verify-weight/:weighing_id', async (req, res) => {
   const {weighing_id} = req._params
   const { measuredWeight } = req.body
 
