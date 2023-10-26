@@ -43,7 +43,8 @@ export async function CreateWeighing(req){
     driver_name: req.body.driver.name,
     company: req.body.invoice.company_name,
     load_weight: req.body.invoice.load_weight,
-    amount: req.body.invoice.amount,
+    vehicle_year: req.body.license_plate.vehicle_year,
+    vehicle_model: req.body.license_plate.vehicle_model,
     createdAt: new Date(),
   }
 
