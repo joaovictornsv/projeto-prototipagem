@@ -60,7 +60,8 @@ app.get('/verify-plate/:number', async (req, res) => {
   res.json({
     allowed,
     ...(allowed && {
-      weighing_id: weighing._id
+      weighing_id: weighing._id,
+      loadWeight: weighing.load_weight
     })
   })
 })
