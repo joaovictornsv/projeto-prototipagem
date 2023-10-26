@@ -99,5 +99,16 @@ app.post('/create/weighing', async (req, res) => {
   res.json(response)
 })
 
+app.put('/finalize/weighing/:weighing_id',async (req, res) => {
+  const {weighing_id}= req.params
+
+  const collection = await getCollection(Collections.WEIGHINGS)
+  const response =  await collection.updateOne(weighing_id, {
+    status: WeighingStatusEnum.DONE
+  }, {})
+
+  res.json(response)
+})
+
 
 app.listen(3000, () => console.log('Server running on port 3000'))
