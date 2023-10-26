@@ -3,6 +3,7 @@ import cors from 'cors'
 import {DatabaseName, getDatabase} from "./db.js";
 import {CreateWeighing, verifyWeight, WeighingStatusEnum} from './collections/weighingCollection.js'
 import { faker } from '@faker-js/faker';
+import {ObjectId} from "mongodb";
 
 const app = express()
 app.use(cors())
@@ -69,7 +70,7 @@ app.get('/verify-weight/:weighing_id', async (req, res) => {
   const { measuredWeight } = req.body
 
   const collection = await getCollection(Collections.WEIGHINGS)
-  const weighing = await collection.findOne({"_id": weighing_id})
+  const weighing = await collection.findOne(new ObjectId(weighing_id))
   const allowed = await verifyWeight(weighing, measuredWeight)
 
   res.json({
@@ -112,7 +113,7 @@ app.put('/finalize/weighing/:weighing_id',async (req, res) => {
   const {weighing_id}= req.params
 
   const collection = await getCollection(Collections.WEIGHINGS)
-  const response =  await collection.updateOne({_id: weighing_id}, {
+  const response =  await collection.updateOne({_id: new ObjectId(weighing_id)}, {
     $set: { status: WeighingStatusEnum.DONE }
   }, {})
 
