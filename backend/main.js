@@ -80,7 +80,7 @@ app.get('/verify-weight/:weighing_id', async (req, res) => {
 app.get('/license-plate-info', async (req, res) => {
   res.json({
     model: faker.vehicle.vehicle(),
-    year: `${faker.date.past().getFullYear()}`
+    year: `${faker.date.past({ years: 20 }).getFullYear()}`
   })
 })
 
