@@ -1,10 +1,5 @@
+import {MainRoutes} from "./router/Router.jsx";
 
-function App() {
-  return (
-    <h1>
-      Projeto Prototipagem
-    </h1>
-  )
+export default function App() {
+  return <MainRoutes />;
 }
-
-export default App
