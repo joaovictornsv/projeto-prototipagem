@@ -16,22 +16,41 @@ export const WeighingStatusLabel = {
     color: 'text-teal-300'
   }
 }
-
+const REFRESH_WEIGHINGS_INTERVAL = 5 * 1000 // 5 seg.
 export const Recent = () => {
   const navigate = useNavigate()
   const [weighings, setWeighings] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [lastRefresh, setLastRefresh] = useState(new Date());
 
-  useEffect(() => {
-    setIsLoading(true)
+  const refreshWeighings = () => {
     getRecentWeighings()
       .then((data) => {
         setIsLoading(false)
         setWeighings(data)
       })
       .catch((e) => console.error(e))
+  }
 
+  useEffect(() => {
+    setIsLoading(true)
+    refreshWeighings()
   }, []);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setLastRefresh(new Date());
+    }, REFRESH_WEIGHINGS_INTERVAL);
+
+    const cleanUp = () => {
+      if (handler) {
+        clearInterval(handler);
+      }
+    };
+
+    refreshWeighings()
+    return cleanUp
+  }, [lastRefresh])
 
   return (
     <div className="w-full flex flex-col gap-12">
@@ -55,6 +74,11 @@ export const Recent = () => {
         <h3 className="text-xl font-bold text-center">Sem pesagens recentes.</h3>
       ): (
         <div className="flex flex-col gap-4">
+          <div className="flex items-center self-end">
+            <span className="text-zinc-400">
+              Última atualização: {moment(lastRefresh).format('hh:mm:ss DD/MM/YYYY')}
+            </span>
+          </div>
           {weighings.map((weighing) => (
             <div className="rounded bg-zinc-900 p-4" key={weighing._id}>
               <div className="flex justify-between items-start">
@@ -80,7 +104,7 @@ export const Recent = () => {
                 </div>
                 <div className="flex items-end flex-col gap-2">
                   <span className="opacity-80">
-                    {moment(weighing.createdAt).format('DD MMMM YY')}
+                    {moment(weighing.createdAt).format(' DD/MM/YYYY')}
                   </span>
                   <span className={WeighingStatusLabel[weighing.status].color}>
                     {WeighingStatusLabel[weighing.status].label}
