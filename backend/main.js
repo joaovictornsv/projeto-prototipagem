@@ -22,10 +22,6 @@ const getCollection = async (collectionName) => {
   return db.collection(collectionName)
 }
 
-app.get('/', async (req, res) => {
-  res.json({ ok: true })
-})
-
 app.get('/drivers', async (req, res) => {
   const collection = await getCollection(Collections.DRIVERS)
   const drivers = await collection.find().toArray()
