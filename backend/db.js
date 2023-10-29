@@ -1,7 +1,7 @@
-import { MongoClient } from 'mongodb'
-import {configDotenv} from "dotenv";
+import { MongoClient } from 'mongodb';
+import { configDotenv } from 'dotenv';
 
-configDotenv()
+configDotenv();
 
 // Connection URL
 const url = process.env.MONGO_CONNECTION_URL;
@@ -13,9 +13,9 @@ export const DatabaseName = process.env.DB_NAME;
 export const getDatabase = async (dbName) => {
   await client.connect();
   return client.db(dbName);
-}
+};
 
 export const getCollection = async (collectionName) => {
-  const db = await getDatabase(DatabaseName)
-  return db.collection(collectionName)
-}
+  const db = await getDatabase(DatabaseName);
+  return db.collection(collectionName);
+};
