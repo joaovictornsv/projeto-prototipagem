@@ -1,46 +1,46 @@
-import {Button} from "../atoms/Button.jsx";
-import {useNavigate} from "react-router-dom";
-import {RoutePaths} from "../../router/RoutePaths.js";
-import {faArrowLeft} from "@fortawesome/free-solid-svg-icons/faArrowLeft";
-import {useEffect, useState} from "react";
-import {getRecentWeighings} from "../../utils/api.js";
+import { Button } from '../atoms/Button.jsx';
+import { useNavigate } from 'react-router-dom';
+import { RoutePaths } from '../../router/RoutePaths.js';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { useEffect, useState } from 'react';
+import { getRecentWeighings } from '../../utils/api.js';
 import moment from 'moment';
 
 export const WeighingStatusLabel = {
   PENDING: {
     label: 'Em andamento',
-    color: 'text-yellow-300'
+    color: 'text-yellow-300',
   },
   DONE: {
     label: 'Concluída',
-    color: 'text-teal-300'
-  }
-}
-const REFRESH_WEIGHINGS_INTERVAL = 5 * 1000 // 5 seg.
+    color: 'text-teal-300',
+  },
+};
+const REFRESH_WEIGHING_INTERVAL = 5 * 1000; // 5 seg.
 export const Recent = () => {
-  const navigate = useNavigate()
-  const [weighings, setWeighings] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate();
+  const [weighings, setWeighings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
   const refreshWeighings = () => {
     getRecentWeighings()
       .then((data) => {
-        setIsLoading(false)
-        setWeighings(data)
+        setIsLoading(false);
+        setWeighings(data);
       })
-      .catch((e) => console.error(e))
-  }
+      .catch((e) => console.error(e));
+  };
 
   useEffect(() => {
-    setIsLoading(true)
-    refreshWeighings()
+    setIsLoading(true);
+    refreshWeighings();
   }, []);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setLastRefresh(new Date());
-    }, REFRESH_WEIGHINGS_INTERVAL);
+    }, REFRESH_WEIGHING_INTERVAL);
 
     const cleanUp = () => {
       if (handler) {
@@ -48,15 +48,13 @@ export const Recent = () => {
       }
     };
 
-    refreshWeighings()
-    return cleanUp
-  }, [lastRefresh])
+    refreshWeighings();
+    return cleanUp;
+  }, [lastRefresh]);
 
   return (
-    <div className="w-full flex flex-col gap-12">
-      <div
-        className="flex flex-col items-start justify-between gap-2"
-      >
+    <div className="flex w-full flex-col gap-12">
+      <div className="flex flex-col items-start justify-between gap-2">
         <Button
           type="ghost"
           icon={faArrowLeft}
@@ -65,44 +63,40 @@ export const Recent = () => {
           onClick={() => navigate(RoutePaths.HOME)}
         />
 
-        <h1 className="text-3xl font-bold text-center">Pesagens recentes</h1>
+        <h1 className="text-center text-3xl font-bold">Pesagens recentes</h1>
       </div>
 
       {isLoading ? (
-        <h3 className="text-xl font-bold text-center">Carregando...</h3>
+        <h3 className="text-center text-xl font-bold">Carregando...</h3>
       ) : !weighings.length ? (
-        <h3 className="text-xl font-bold text-center">Sem pesagens recentes.</h3>
-      ): (
+        <h3 className="text-center text-xl font-bold">
+          Sem pesagens recentes.
+        </h3>
+      ) : (
         <div className="flex flex-col gap-4">
           <div className="flex items-center self-end">
             <span className="text-zinc-400">
-              Última atualização: {moment(lastRefresh).format('hh:mm:ss DD/MM/YYYY')}
+              Última atualização:{' '}
+              {moment(lastRefresh).format('hh:mm:ss DD/MM/YYYY')}
             </span>
           </div>
           {weighings.map((weighing) => (
             <div className="rounded bg-zinc-900 p-4" key={weighing._id}>
-              <div className="flex justify-between items-start">
+              <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
                   <span className="font-bold">
-                    {weighing.vehicle_model}{' - '}
-                  <span className="opacity-70">
-                    {weighing.vehicle_year}
+                    {weighing.vehicle_model}
+                    {' - '}
+                    <span className="opacity-70">{weighing.vehicle_year}</span>
                   </span>
-                  </span>
-                  <span>
-                    Placa {weighing.license_plate_number}
-                  </span>
-                  <span>
-                    Motorista: {weighing.driver_name}
-                  </span>
-                  <span className="opacity-80">
-                    {weighing.company}
-                  </span>
+                  <span>Placa {weighing.license_plate_number}</span>
+                  <span>Motorista: {weighing.driver_name}</span>
+                  <span className="opacity-80">{weighing.company}</span>
                   <span className="opacity-80">
                     Carga: {weighing.load_weight}kg
                   </span>
                 </div>
-                <div className="flex items-end flex-col gap-2">
+                <div className="flex flex-col items-end gap-2">
                   <span className="opacity-80">
                     {moment(weighing.createdAt).format('hh:mm DD/MM/YYYY')}
                   </span>
@@ -111,11 +105,10 @@ export const Recent = () => {
                   </span>
                 </div>
               </div>
-
             </div>
           ))}
         </div>
       )}
     </div>
-  )
-}
+  );
+};
