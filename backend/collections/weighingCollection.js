@@ -1,5 +1,5 @@
 import { getCollection } from '../db.js';
-import getOrCreateInvoice from './invoiceCollection.js';
+import {getOrCreateInvoice, updateInvoiceLoadWeight, updateInvoiceUnloadWeight} from './invoiceCollection.js';
 import { getOrCreateLicensePlate } from './licensePlateCollection.js';
 import getOrCreateDriver from './driverCollection.js';
 import { Collections } from '../main.js';
@@ -9,6 +9,7 @@ const collectionWeighings = await getCollection('weighingDb');
 export const WeighingStatusEnum = {
   PENDING: 'PENDING',
   DONE: 'DONE',
+  WAITING_WEIGHT_CONFIRMATION: 'WAITING_WEIGHT_CONFIRMATION'
 };
 
 export async function CreateWeighing(req) {
@@ -25,7 +26,8 @@ export async function CreateWeighing(req) {
 
   const invoice = await getOrCreateInvoice({
     company_name: req.body.invoice.company_name,
-    load_weight: req.body.invoice.load_weight,
+    expected_load_weight: req.body.invoice.load_weight,
+    expected_unload_weight: req.body.invoice.unload_weight,
     load_items: req.body.invoice.load_items,
     amount: req.body.invoice.amount,
     barcode: req.body.invoice.barcode,
@@ -62,17 +64,37 @@ export async function getOrCreateWeighing(weighing) {
   return await collectionWeighings.insertOne(weighing);
 }
 
-export async function verifyWeight(weighing, weight) {
+export async function verify_load_weight(weighing, weight) {
   if (!weighing) {
     return false;
   }
   const invoice = await getOrCreateInvoice({
     barcode: weighing.invoice_barcode,
   });
-  const invoiceWeight = Number(invoice.load_weight);
+  const invoiceWeight = Number(invoice.expected_load_weight);
 
   const tolerance = 0.05;
   const errorMargin = invoiceWeight * tolerance;
+
+  await updateInvoiceLoadWeight(invoice, weight)
+
+  const diff = Math.abs(Number(weight) - invoiceWeight);
+  return diff <= errorMargin;
+}
+
+export async function verify_unload_weight(weighing, weight) {
+  if (!weighing) {
+    return false;
+  }
+  const invoice = await getOrCreateInvoice({
+    barcode: weighing.invoice_barcode,
+  });
+  const invoiceWeight = Number(invoice.unload_weight);
+
+  const tolerance = 0.05;
+  const errorMargin = invoiceWeight * tolerance;
+
+  await updateInvoiceUnloadWeight(invoice, weight)
 
   const diff = Math.abs(Number(weight) - invoiceWeight);
   return diff <= errorMargin;

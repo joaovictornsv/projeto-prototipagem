@@ -4,7 +4,8 @@ import { DatabaseName, getDatabase } from './db.js';
 import {
   CreateWeighing,
   getRecentWeighings,
-  verifyWeight,
+  verify_load_weight,
+  verify_unload_weight,
   WeighingStatusEnum,
 } from './collections/weighingCollection.js';
 import { faker } from '@faker-js/faker';
@@ -91,13 +92,28 @@ app.get('/verify-plate/:number', async (req, res) => {
   });
 });
 
-app.post('/verify-weight/:weighing_id', async (req, res) => {
+app.post('/verify_load_weight/:weighing_id', async (req, res) => {
   const { weighing_id } = req.params;
   const { measuredWeight } = req.body;
 
   const collection = await getCollection(Collections.WEIGHINGS);
   const weighing = await collection.findOne(new ObjectId(weighing_id));
-  const allowed = await verifyWeight(weighing, measuredWeight);
+
+  const allowed = await verify_load_weight(weighing, measuredWeight);
+
+  res.json({
+    allowed,
+  });
+});
+
+app.post('/verify_unload_weight/:weighing_id', async (req, res) => {
+  const { weighing_id } = req.params;
+  const { measuredWeight } = req.body;
+
+  const collection = await getCollection(Collections.WEIGHINGS);
+  const weighing = await collection.findOne(new ObjectId(weighing_id));
+
+  const allowed = await verify_unload_weight(weighing, measuredWeight);
 
   res.json({
     allowed,
@@ -143,7 +159,24 @@ app.post('/create/weighing', async (req, res) => {
   res.json(response);
 });
 
-app.put('/finalize/weighing/:weighing_id', async (req, res) => {
+app.put('/finalize/load_weighing/:weighing_id', async (req, res) => {
+  const { weighing_id } = req.params;
+
+  const collection = await getCollection(Collections.WEIGHINGS);
+  const response = await collection.updateOne(
+    { _id: new ObjectId(weighing_id) },
+    {
+      $set: { status: WeighingStatusEnum.WAITING_WEIGHT_CONFIRMATION },
+    },
+    {},
+  );
+
+  const weighings = await getRecentWeighings();
+  req.io.emit('listRecentWeighings', weighings);
+  res.json(response);
+});
+
+app.put('/finalize/unload_weighing/:weighing_id', async (req, res) => {
   const { weighing_id } = req.params;
 
   const collection = await getCollection(Collections.WEIGHINGS);
