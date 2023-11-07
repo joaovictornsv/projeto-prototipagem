@@ -1,5 +1,9 @@
 import { getCollection } from '../db.js';
-import {getOrCreateInvoice, updateInvoiceLoadWeight, updateInvoiceUnloadWeight} from './invoiceCollection.js';
+import {
+  getOrCreateInvoice,
+  updateInvoiceLoadWeight,
+  updateInvoiceUnloadWeight,
+} from './invoiceCollection.js';
 import { getOrCreateLicensePlate } from './licensePlateCollection.js';
 import getOrCreateDriver from './driverCollection.js';
 import { Collections } from '../main.js';
@@ -9,7 +13,7 @@ const collectionWeighings = await getCollection('weighingDb');
 export const WeighingStatusEnum = {
   PENDING: 'PENDING',
   DONE: 'DONE',
-  WAITING_WEIGHT_CONFIRMATION: 'WAITING_WEIGHT_CONFIRMATION'
+  WAITING_WEIGHT_CONFIRMATION: 'WAITING_WEIGHT_CONFIRMATION',
 };
 
 export async function CreateWeighing(req) {
@@ -76,7 +80,7 @@ export async function verify_load_weight(weighing, weight) {
   const tolerance = 0.05;
   const errorMargin = invoiceWeight * tolerance;
 
-  await updateInvoiceLoadWeight(invoice, weight)
+  await updateInvoiceLoadWeight(invoice, weight);
 
   const diff = Math.abs(Number(weight) - invoiceWeight);
   return diff <= errorMargin;
@@ -94,7 +98,7 @@ export async function verify_unload_weight(weighing, weight) {
   const tolerance = 0.05;
   const errorMargin = invoiceWeight * tolerance;
 
-  await updateInvoiceUnloadWeight(invoice, weight)
+  await updateInvoiceUnloadWeight(invoice, weight);
 
   const diff = Math.abs(Number(weight) - invoiceWeight);
   return diff <= errorMargin;
