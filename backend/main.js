@@ -3,18 +3,40 @@ import cors from 'cors';
 import { DatabaseName, getDatabase } from './db.js';
 import {
   CreateWeighing,
+  getRecentWeighings,
   verifyWeight,
   WeighingStatusEnum,
 } from './collections/weighingCollection.js';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
+const http = createServer(app);
+const io = new Server(http, {
+  cors: {
+    origin: [
+      'https://q6gr2ekf53wriaeri-projetos-faculdade.svc-us.zcloud.ws',
+      'http://localhost:5173',
+    ],
+  },
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const Collections = {
+io.on('connection', (socket) => {
+  console.log('Connection established', socket.id);
+});
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
+export const Collections = {
   DRIVERS: 'driverDb',
   WEIGHINGS: 'weighingDb',
   INVOICES: 'invoiceDb',
@@ -133,7 +155,9 @@ app.put('/finalize/weighing/:weighing_id', async (req, res) => {
     {},
   );
 
+  const weighings = await getRecentWeighings();
+  req.io.emit('listRecentWeighings', weighings);
   res.json(response);
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+export { http, io };
