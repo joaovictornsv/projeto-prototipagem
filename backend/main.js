@@ -17,7 +17,7 @@ const http = createServer(app);
 const io = new Server(http, {
   cors: {
     origin: [
-      'https://q6gr2ekf53wriaeri-projetos-faculdade.svc-us.zcloud.ws',
+      'https://jifxwj4sxqahefy5o-projetos-faculdade.svc.zcloud.ws',
       'http://localhost:5173',
     ],
   },
