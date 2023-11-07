@@ -1,4 +1,4 @@
 import { io } from 'socket.io-client';
 
-const URL = import.meta.env.VITE_API_URL;
+const URL = 'https://q6gr2ekf53wriaeri-projetos-faculdade.svc-us.zcloud.ws';
 export const socket = io(URL);

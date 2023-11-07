@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: 'https://q6gr2ekf53wriaeri-projetos-faculdade.svc-us.zcloud.ws',
 });
 
 export const getLicensePlateInfo = async () => {
