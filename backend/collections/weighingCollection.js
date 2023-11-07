@@ -2,6 +2,7 @@ import { getCollection } from '../db.js';
 import getOrCreateInvoice from './invoiceCollection.js';
 import { getOrCreateLicensePlate } from './licensePlateCollection.js';
 import getOrCreateDriver from './driverCollection.js';
+import { Collections } from '../main.js';
 
 const collectionWeighings = await getCollection('weighingDb');
 
@@ -76,3 +77,8 @@ export async function verifyWeight(weighing, weight) {
   const diff = Math.abs(Number(weight) - invoiceWeight);
   return diff <= errorMargin;
 }
+
+export const getRecentWeighings = async () => {
+  const collection = await getCollection(Collections.WEIGHINGS);
+  return collection.find().sort({ _id: -1 }).limit(10).toArray();
+};

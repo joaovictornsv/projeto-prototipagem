@@ -9,6 +9,7 @@ import {
 import { RoutePaths } from '../../router/RoutePaths.js';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { useNavigate } from 'react-router-dom';
+import { socket } from '../../utils/websocket.js';
 
 export const New = () => {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ export const New = () => {
     setIsCreating(true);
     createWeighing(data)
       .then(() => {
+        socket.emit('newWeighing');
         setIsCreating(false);
         navigate(RoutePaths.RECENT);
       })

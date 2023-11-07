@@ -2,9 +2,8 @@ import { Button } from '../atoms/Button.jsx';
 import { useNavigate } from 'react-router-dom';
 import { RoutePaths } from '../../router/RoutePaths.js';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
-import { useEffect, useState } from 'react';
-import { getRecentWeighings } from '../../utils/api.js';
 import moment from 'moment';
+import { useRecentWeighings } from '../../hooks/useRecentWeighings.js';
 
 export const WeighingStatusLabel = {
   PENDING: {
@@ -16,41 +15,10 @@ export const WeighingStatusLabel = {
     color: 'text-teal-300',
   },
 };
-const REFRESH_WEIGHING_INTERVAL = 5 * 1000; // 5 seg.
+
 export const Recent = () => {
   const navigate = useNavigate();
-  const [weighings, setWeighings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
-
-  const refreshWeighings = () => {
-    getRecentWeighings()
-      .then((data) => {
-        setIsLoading(false);
-        setWeighings(data);
-      })
-      .catch((e) => console.error(e));
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    refreshWeighings();
-  }, []);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setLastRefresh(new Date());
-    }, REFRESH_WEIGHING_INTERVAL);
-
-    const cleanUp = () => {
-      if (handler) {
-        clearInterval(handler);
-      }
-    };
-
-    refreshWeighings();
-    return cleanUp;
-  }, [lastRefresh]);
+  const { isLoading, weighings } = useRecentWeighings();
 
   return (
     <div className="flex w-full flex-col gap-12">
@@ -74,12 +42,6 @@ export const Recent = () => {
         </h3>
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="flex items-center self-end">
-            <span className="text-zinc-400">
-              Última atualização:{' '}
-              {moment(lastRefresh).format('hh:mm:ss DD/MM/YYYY')}
-            </span>
-          </div>
           {weighings.map((weighing) => (
             <div className="rounded bg-zinc-900 p-4" key={weighing._id}>
               <div className="flex items-start justify-between">
