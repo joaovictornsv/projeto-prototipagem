@@ -9,23 +9,27 @@ export async function getOrCreateInvoice(invoice) {
   if (newInvoice) {
     return newInvoice;
   }
+
   return await collectionInvoices.insertOne(invoice);
 }
 
 export async function updateInvoiceLoadWeight(invoice, weight) {
   return await collectionInvoices.updateOne(
     { _id: new ObjectId(invoice._id) },
+
     {
-      $set: {  load_weight: weight },
+      $set: { load_weight: weight },
     },
-    {},)
+    {},
+  );
 }
 
 export async function updateInvoiceUnloadWeight(invoice, weight) {
   return await collectionInvoices.updateOne(
     { _id: new ObjectId(invoice._id) },
     {
-      $set: {  unload_weight: weight },
+      $set: { unload_weight: weight },
     },
-    {},)
+    {},
+  );
 }
