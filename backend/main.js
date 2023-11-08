@@ -3,15 +3,16 @@ import cors from 'cors';
 import { DatabaseName, getDatabase } from './db.js';
 import {
   CreateWeighing,
-  getRecentWeighings,
-  verify_load_weight,
-  verify_unload_weight,
+  saveFullLoadWeight,
   WeighingStatusEnum,
+  sendRecentWeighingsToSocket,
+  sendWeighingDetailsToSocket,
 } from './collections/weighingCollection.js';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { Collections } from './collections/collectionsUtils.js';
 
 const app = express();
 const http = createServer(app);
@@ -36,13 +37,6 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-
-export const Collections = {
-  DRIVERS: 'driverDb',
-  WEIGHINGS: 'weighingDb',
-  INVOICES: 'invoiceDb',
-  LICENSE_PLATES: 'licensePlateDb',
-};
 
 const getCollection = async (collectionName) => {
   const db = await getDatabase(DatabaseName);
@@ -73,10 +67,14 @@ app.get('/verify-plate/:number', async (req, res) => {
   });
 
   const weighingsCollection = await getCollection(Collections.WEIGHINGS);
+  const pendingWeighingStatus = [
+    WeighingStatusEnum.PENDING,
+    WeighingStatusEnum.WAITING_WEIGHT_CONFIRMATION,
+  ];
   const weighing = await weighingsCollection.findOne(
     {
       license_plate_number: number,
-      status: WeighingStatusEnum.PENDING,
+      status: { $in: pendingWeighingStatus },
     },
     { _id: -1 },
   );
@@ -92,29 +90,32 @@ app.get('/verify-plate/:number', async (req, res) => {
   });
 });
 
-app.post('/verify_load_weight/:weighing_id', async (req, res) => {
-  const { weighing_id } = req.params;
+// Primeira pesagem
+app.post('/save_full_load_weight/:weighingId', async (req, res) => {
+  const { weighingId } = req.params;
   const { measuredWeight } = req.body;
 
-  const collection = await getCollection(Collections.WEIGHINGS);
-  const weighing = await collection.findOne(new ObjectId(weighing_id));
+  const allowed = await saveFullLoadWeight(weighingId, measuredWeight);
 
-  const allowed = await verify_load_weight(weighing, measuredWeight);
-
+  await sendRecentWeighingsToSocket(req.io);
+  await sendWeighingDetailsToSocket(req.io, weighingId);
   res.json({
     allowed,
   });
 });
 
-app.post('/verify_unload_weight/:weighing_id', async (req, res) => {
-  const { weighing_id } = req.params;
-  const { measuredWeight } = req.body;
+// Segunda pesagem
+app.post('/verify_weight/:weighingId', async (req, res) => {
+  const { weighingId } = req.params;
+  const { measuredUnloadWeight } = req.body;
 
   const collection = await getCollection(Collections.WEIGHINGS);
-  const weighing = await collection.findOne(new ObjectId(weighing_id));
+  const weighing = await collection.findOne(new ObjectId(weighingId));
 
-  const allowed = await verify_unload_weight(weighing, measuredWeight);
+  const allowed = await saveFullLoadWeight(weighing, measuredUnloadWeight);
 
+  await sendRecentWeighingsToSocket(req.io);
+  await sendWeighingDetailsToSocket(req.io, weighingId);
   res.json({
     allowed,
   });
@@ -159,37 +160,20 @@ app.post('/create/weighing', async (req, res) => {
   res.json(response);
 });
 
-app.put('/finalize/load_weighing/:weighing_id', async (req, res) => {
-  const { weighing_id } = req.params;
+app.put('/finalize/weighing/:weighingId', async (req, res) => {
+  const { weighingId } = req.params;
 
   const collection = await getCollection(Collections.WEIGHINGS);
   const response = await collection.updateOne(
-    { _id: new ObjectId(weighing_id) },
-    {
-      $set: { status: WeighingStatusEnum.WAITING_WEIGHT_CONFIRMATION },
-    },
-    {},
-  );
-
-  const weighings = await getRecentWeighings();
-  req.io.emit('listRecentWeighings', weighings);
-  res.json(response);
-});
-
-app.put('/finalize/unload_weighing/:weighing_id', async (req, res) => {
-  const { weighing_id } = req.params;
-
-  const collection = await getCollection(Collections.WEIGHINGS);
-  const response = await collection.updateOne(
-    { _id: new ObjectId(weighing_id) },
+    { _id: new ObjectId(weighingId) },
     {
       $set: { status: WeighingStatusEnum.DONE },
     },
     {},
   );
 
-  const weighings = await getRecentWeighings();
-  req.io.emit('listRecentWeighings', weighings);
+  await sendRecentWeighingsToSocket(req.io);
+  await sendWeighingDetailsToSocket(req.io, weighingId);
   res.json(response);
 });
 
