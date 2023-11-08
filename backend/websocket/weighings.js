@@ -1,5 +1,8 @@
 import { io } from '../main.js';
-import { getRecentWeighings } from '../collections/weighingCollection.js';
+import {
+  getRecentWeighings,
+  getWeighingDetails,
+} from '../collections/weighingCollection.js';
 
 io.on('connect', (socket) => {
   socket.on('getRecentWeighings', async () => {
@@ -14,5 +17,11 @@ io.on('connect', (socket) => {
     const weighings = await getRecentWeighings();
 
     io.emit('listRecentWeighings', weighings);
+  });
+
+  socket.on('getWeighingDetails', async ({ weighingId }) => {
+    const weighing = await getWeighingDetails({ _id: weighingId });
+
+    socket.emit('listWeighingDetails', weighing);
   });
 });
