@@ -31,8 +31,7 @@ export async function CreateWeighing(req) {
 
   const invoice = await getOrCreateInvoice({
     company_name: req.body.invoice.company_name,
-    expected_load_weight: req.body.invoice.load_weight,
-    expected_unload_weight: req.body.invoice.unload_weight,
+    load_weight: req.body.invoice.load_weight,
     load_items: req.body.invoice.load_items,
     amount: req.body.invoice.amount,
     barcode: req.body.invoice.barcode,
@@ -71,7 +70,7 @@ export async function getOrCreateWeighing(weighing) {
 
 export async function saveFullLoadWeight(weighingId, measuredWeight) {
   const collection = await getCollection(Collections.WEIGHINGS);
-  const weighing = await collection.findOne(new ObjectId(weighingId));
+  const weighing = await collection.findOne({ _id: new ObjectId(weighingId) });
 
   if (!weighing) {
     return false;
@@ -84,7 +83,7 @@ export async function saveFullLoadWeight(weighingId, measuredWeight) {
 
 export async function verifyUnloadWeight(weighingId, measuredUnloadWeight) {
   const collection = await getCollection(Collections.WEIGHINGS);
-  const weighing = await collection.findOne(new ObjectId(weighingId));
+  const weighing = await collection.findOne({ _id: new ObjectId(weighingId) });
 
   if (!weighing) {
     return false;
@@ -92,16 +91,15 @@ export async function verifyUnloadWeight(weighingId, measuredUnloadWeight) {
 
   await updateUnloadWeight(weighingId, measuredUnloadWeight);
 
-  const loadWeight = weighing.full_load_weight - measuredUnloadWeight;
+  const estimatedLoadWeight = weighing.full_load_weight - measuredUnloadWeight;
   const invoice = await getOrCreateInvoice({
     barcode: weighing.invoice_barcode,
   });
-  const invoiceWeight = Number(invoice.unload_weight);
-
+  const invoiceWeight = Number(invoice.load_weight);
   const tolerance = 0.05;
   const errorMargin = invoiceWeight * tolerance;
 
-  const diff = Math.abs(Number(loadWeight) - invoiceWeight);
+  const diff = Math.abs(Number(estimatedLoadWeight) - invoiceWeight);
   return diff <= errorMargin;
 }
 
@@ -112,7 +110,7 @@ export const getRecentWeighings = async () => {
 
 export const getWeighingDetails = async (weighingId) => {
   const collection = await getCollection(Collections.WEIGHINGS);
-  return collection.findOne({ _id: weighingId });
+  return collection.findOne({ _id: new ObjectId(weighingId) });
 };
 
 export const sendRecentWeighingsToSocket = async (socket) => {

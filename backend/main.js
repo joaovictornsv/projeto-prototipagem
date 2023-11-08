@@ -7,6 +7,7 @@ import {
   WeighingStatusEnum,
   sendRecentWeighingsToSocket,
   sendWeighingDetailsToSocket,
+  verifyUnloadWeight,
 } from './collections/weighingCollection.js';
 import { faker } from '@faker-js/faker';
 import { ObjectId } from 'mongodb';
@@ -109,10 +110,7 @@ app.post('/verify_weight/:weighingId', async (req, res) => {
   const { weighingId } = req.params;
   const { measuredUnloadWeight } = req.body;
 
-  const collection = await getCollection(Collections.WEIGHINGS);
-  const weighing = await collection.findOne(new ObjectId(weighingId));
-
-  const allowed = await saveFullLoadWeight(weighing, measuredUnloadWeight);
+  const allowed = await verifyUnloadWeight(weighingId, measuredUnloadWeight);
 
   await sendRecentWeighingsToSocket(req.io);
   await sendWeighingDetailsToSocket(req.io, weighingId);
@@ -157,6 +155,7 @@ app.get('/weighings', async (req, res) => {
 
 app.post('/create/weighing', async (req, res) => {
   const response = await CreateWeighing(req);
+  await sendRecentWeighingsToSocket(req.io);
   res.json(response);
 });
 

@@ -4,7 +4,7 @@ import { Collections } from './collectionsUtils.js';
 import { WeighingStatusEnum } from './weighingCollection.js';
 
 const collectionInvoices = await getCollection('invoiceDb');
-const weighingsColletion = await getCollection(Collections.WEIGHINGS);
+const weighingsCollection = await getCollection(Collections.WEIGHINGS);
 
 export async function getOrCreateInvoice(invoice) {
   const newInvoice = await collectionInvoices.findOne({
@@ -18,7 +18,7 @@ export async function getOrCreateInvoice(invoice) {
 }
 
 export async function updateFullLoadWeight(weighingId, measuredWeight) {
-  return weighingsColletion.updateOne(
+  return weighingsCollection.updateOne(
     { _id: new ObjectId(weighingId) },
     {
       $set: {
@@ -30,7 +30,7 @@ export async function updateFullLoadWeight(weighingId, measuredWeight) {
 }
 
 export async function updateUnloadWeight(weighingId, measuredUnloadWeight) {
-  return weighingsColletion.updateOne(
+  return weighingsCollection.updateOne(
     { _id: new ObjectId(weighingId) },
     {
       $set: { unload_weight: measuredUnloadWeight },
