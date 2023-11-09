@@ -5,6 +5,7 @@ import { RoutePaths } from './RoutePaths.js';
 import { Layout } from './Layout.jsx';
 import { New } from '../atomic/pages/New.jsx';
 import { Recent } from '../atomic/pages/Recent.jsx';
+import { Info } from '../atomic/pages/Info.jsx';
 
 const ROUTES_COMPONENTS = {
   [RoutePaths.HOME]: (
@@ -21,6 +22,11 @@ const ROUTES_COMPONENTS = {
     <Layout>
       <Recent />
     </Layout>
+  ),
+  [RoutePaths.INFO]: (
+
+      <Info />
+   
   ),
 };
 

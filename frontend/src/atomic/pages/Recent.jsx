@@ -2,6 +2,7 @@ import { Button } from '../atoms/Button.jsx';
 import { useNavigate } from 'react-router-dom';
 import { RoutePaths } from '../../router/RoutePaths.js';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import moment from 'moment';
 import { useRecentWeighings } from '../../hooks/useRecentWeighings.js';
 
@@ -46,14 +47,14 @@ export const Recent = () => {
             <div className="rounded bg-zinc-900 p-4" key={weighing._id}>
               <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">
-                  <span className="font-bold">
+                  {/* <span className="font-bold">
                     {weighing.vehicle_model}
                     {' - '}
                     <span className="opacity-70">{weighing.vehicle_year}</span>
-                  </span>
+                  </span> */}
                   <span>Placa {weighing.license_plate_number}</span>
-                  <span>Motorista: {weighing.driver_name}</span>
-                  <span className="opacity-80">{weighing.company}</span>
+                  {/* <span>Motorista: {weighing.driver_name}</span>
+                  <span className="opacity-80">{weighing.company}</span> */}
                   <span className="opacity-80">
                     Carga: {weighing.load_weight}kg
                   </span>
@@ -65,6 +66,10 @@ export const Recent = () => {
                   <span className={WeighingStatusLabel[weighing.status].color}>
                     {WeighingStatusLabel[weighing.status].label}
                   </span>
+                  <Button 
+                    icon={faSearch}
+                    className="w-max items-end"
+                    onClick={() => navigate(RoutePaths.RECENT + '/' + weighing._id)} />
                 </div>
               </div>
             </div>
