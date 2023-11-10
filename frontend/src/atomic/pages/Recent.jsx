@@ -18,6 +18,7 @@ export const WeighingStatusLabel = {
   DONE: {
     label: 'Pesagem concluída',
     color: 'text-teal-300',
+    isDone: true,
   },
 };
 

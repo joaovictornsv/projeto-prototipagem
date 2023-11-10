@@ -85,14 +85,16 @@ export const Info = () => {
       ) : (
         <>
           <WeighingTicketContent weighing={weighing} />
-          <div className="text-center">
-            <Button
-              icon={faDownload}
-              text="Download"
-              className="w-max"
-              onClick={() => generatePDF(getTargetElement, options)}
-            />
-          </div>
+          {WeighingStatusLabel[weighing.status].isDone && (
+            <div className="text-center">
+              <Button
+                icon={faDownload}
+                text="Download"
+                className="w-max"
+                onClick={() => generatePDF(getTargetElement, options)}
+              />
+            </div>
+          )}
         </>
       )}
     </div>
