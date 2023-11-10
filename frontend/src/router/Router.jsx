@@ -24,9 +24,9 @@ const ROUTES_COMPONENTS = {
     </Layout>
   ),
   [RoutePaths.INFO]: (
-
+    <Layout>
       <Info />
-   
+    </Layout>
   ),
 };
 
