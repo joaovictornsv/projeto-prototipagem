@@ -14,11 +14,6 @@ export const verifyInvoiceNumber = async () => {
   return response.data;
 };
 
-export const getRecentWeighings = async () => {
-  const response = await api.get('weighings');
-  return response.data;
-};
-
 export const createWeighing = async (data) => {
   const response = await api.post('/create/weighing', data);
   return response.data;
