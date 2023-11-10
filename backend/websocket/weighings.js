@@ -20,7 +20,9 @@ io.on('connect', (socket) => {
   });
 
   socket.on('getWeighingDetails', async ({ weighingId }) => {
-    const weighing = await getWeighingDetails({ _id: weighingId });
+    console.log('Received event getWeighingDetails', weighingId);
+
+    const weighing = await getWeighingDetails(weighingId);
 
     socket.emit('listWeighingDetails', weighing);
   });
