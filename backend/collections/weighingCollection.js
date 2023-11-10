@@ -1,14 +1,20 @@
 import { getCollection } from '../db.js';
-import getOrCreateInvoice from './invoiceCollection.js';
+import {
+  getOrCreateInvoice,
+  updateFullLoadWeight,
+  updateUnloadWeight,
+} from './invoiceCollection.js';
 import { getOrCreateLicensePlate } from './licensePlateCollection.js';
 import getOrCreateDriver from './driverCollection.js';
-import { Collections } from '../main.js';
+import { Collections } from './collectionsUtils.js';
+import { ObjectId } from 'mongodb';
 
 const collectionWeighings = await getCollection('weighingDb');
 
 export const WeighingStatusEnum = {
   PENDING: 'PENDING',
   DONE: 'DONE',
+  WAITING_WEIGHT_CONFIRMATION: 'WAITING_WEIGHT_CONFIRMATION',
 };
 
 export async function CreateWeighing(req) {
@@ -62,23 +68,57 @@ export async function getOrCreateWeighing(weighing) {
   return await collectionWeighings.insertOne(weighing);
 }
 
-export async function verifyWeight(weighing, weight) {
+export async function saveFullLoadWeight(weighingId, measuredWeight) {
+  const collection = await getCollection(Collections.WEIGHINGS);
+  const weighing = await collection.findOne({ _id: new ObjectId(weighingId) });
+
   if (!weighing) {
     return false;
   }
+
+  await updateFullLoadWeight(weighingId, measuredWeight);
+
+  return true;
+}
+
+export async function verifyUnloadWeight(weighingId, measuredUnloadWeight) {
+  const collection = await getCollection(Collections.WEIGHINGS);
+  const weighing = await collection.findOne({ _id: new ObjectId(weighingId) });
+
+  if (!weighing) {
+    return false;
+  }
+
+  await updateUnloadWeight(weighingId, measuredUnloadWeight);
+
+  const estimatedLoadWeight = weighing.full_load_weight - measuredUnloadWeight;
   const invoice = await getOrCreateInvoice({
     barcode: weighing.invoice_barcode,
   });
   const invoiceWeight = Number(invoice.load_weight);
-
   const tolerance = 0.05;
   const errorMargin = invoiceWeight * tolerance;
 
-  const diff = Math.abs(Number(weight) - invoiceWeight);
+  const diff = Math.abs(Number(estimatedLoadWeight) - invoiceWeight);
   return diff <= errorMargin;
 }
 
 export const getRecentWeighings = async () => {
   const collection = await getCollection(Collections.WEIGHINGS);
   return collection.find().sort({ _id: -1 }).limit(10).toArray();
+};
+
+export const getWeighingDetails = async (weighingId) => {
+  const collection = await getCollection(Collections.WEIGHINGS);
+  return collection.findOne({ _id: new ObjectId(weighingId) });
+};
+
+export const sendRecentWeighingsToSocket = async (socket) => {
+  const weighings = await getRecentWeighings();
+  socket.emit('listRecentWeighings', weighings);
+};
+
+export const sendWeighingDetailsToSocket = async (socket, weighingId) => {
+  const weighing = await getWeighingDetails(weighingId);
+  socket.emit('listWeighingDetails', weighing);
 };

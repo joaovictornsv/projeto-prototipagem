@@ -7,12 +7,16 @@ import moment from 'moment';
 import { useRecentWeighings } from '../../hooks/useRecentWeighings.js';
 
 export const WeighingStatusLabel = {
+  WAITING_WEIGHT_CONFIRMATION: {
+    label: 'Aguardando confirmação de pesagem',
+    color: 'text-yellow-300',
+  },
   PENDING: {
-    label: 'Em andamento',
+    label: 'Pesagem em andamento',
     color: 'text-yellow-300',
   },
   DONE: {
-    label: 'Concluída',
+    label: 'Pesagem concluída',
     color: 'text-teal-300',
   },
 };
