@@ -21,7 +21,7 @@ function WeighingTicketContent({ weighing }) {
         <div className="flex flex-col gap-2 ">
           <h1 className="text-lg font-bold">Dados da pesagem</h1>
           <span className="opacity-80">
-            Iniciada em: {moment(weighing.createdAt).format('hh:mm DD/MM/YYYY')}
+            Iniciada em: {moment(weighing.createdAt).format('HH:mm DD/MM/YYYY')}
           </span>
           <span className="opacity-80">Carga: {weighing.load_weight}kg</span>
           <span className="opacity-80">
@@ -55,7 +55,7 @@ function WeighingTicketContent({ weighing }) {
       <hr className="border-black" />
       <p className="text-small pb-3">
         Ticket emitido em Campina Grande,{' '}
-        {moment(new Date()).format('hh:mm DD/MM/YYYY')}
+        {moment(new Date()).format('HH:mm DD/MM/YYYY')}
       </p>
     </div>
   );
@@ -116,7 +116,7 @@ export const Info = () => {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className="text-right opacity-80">
-                    {moment(weighing.createdAt).format('hh:mm DD/MM/YYYY')}
+                    {moment(weighing.createdAt).format('HH:mm DD/MM/YYYY')}
                   </span>
                   <span
                     className={`${

@@ -64,7 +64,7 @@ export const Recent = () => {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className="opacity-80">
-                    {moment(weighing.createdAt).format('hh:mm DD/MM/YYYY')}
+                    {moment(weighing.createdAt).format('HH:mm DD/MM/YYYY')}
                   </span>
                   <span className={WeighingStatusLabel[weighing.status].color}>
                     {WeighingStatusLabel[weighing.status].label}
