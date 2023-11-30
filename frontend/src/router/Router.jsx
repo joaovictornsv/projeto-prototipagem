@@ -6,6 +6,7 @@ import { Layout } from './Layout.jsx';
 import { New } from '../atomic/pages/New.jsx';
 import { Recent } from '../atomic/pages/Recent.jsx';
 import { Info } from '../atomic/pages/Info.jsx';
+import { Ticket } from '../atomic/pages/Ticket.jsx';
 
 const ROUTES_COMPONENTS = {
   [RoutePaths.HOME]: (
@@ -26,6 +27,11 @@ const ROUTES_COMPONENTS = {
   [RoutePaths.INFO]: (
     <Layout>
       <Info />
+    </Layout>
+  ),
+  [RoutePaths.TICKET]: (
+    <Layout>
+      <Ticket />
     </Layout>
   ),
 };

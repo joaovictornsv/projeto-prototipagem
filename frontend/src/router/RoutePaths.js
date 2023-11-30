@@ -3,4 +3,5 @@ export const RoutePaths = {
   NEW: '/new',
   RECENT: '/recent',
   INFO: '/recent/:weighingId',
+  TICKET: '/recent/:weighingId/ticket',
 };
