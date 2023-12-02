@@ -38,9 +38,21 @@ Realizar monitaramente e controle de veículos de carga, bem como garantir que o
 
 ## Requisitos funcionais
 
-- Uma camêra, que permita a captura dos dados da placa
-- Cadastro do motorista no sistema de controle
-- Permitir a conexão entre a camêra $\Longleftrightarrow$ ESP 32 $\Longleftrightarrow$ api
+- Sistema Web para cadastro de pesagem (Motorista, Veículo e Nota Fiscal)
+- Sistema Web com histórico de pesagens
+- Acompanhamento em tempo real do status da pesagem no Sistema Web
+- Gerar ticket no Sistema Web após finalização da pesagem
+- Realizar Reconhecimento Ótico de Caracteres (OCR) de uma placa de carro através de uma câmera
+- Liberar entrada do caminhão para primeira pesagem levantando a cancela, apagando o led vermelho e acendendo o led verde
+- Liberar a saída do caminhão da primeira pesagem levantando a cancela, apagando o led vermelho e acendendo o led verde
+- Liberar entrada do caminhão para segunda pesagem levantando a cancela, apagando o led vermelho e acendendo o led verde
+- Liberar a saída do caminhão da segunda pesagem levantando a cancela, apagando o led vermelho e acendendo o led verde
+- Só fechar a cancela de entrada quando o caminhão estiver na plataforma de pesagem
+- Só fechar a cancela de saída quando o caminhão não estiver mais na plataforma de pesagem
+- Se acontecer algum problema na pesagem, os dois leds vermelhos devem ficar piscando continuamente a cada 2 segundos até a liberação do caminhão
+- Botão para liberar a saída do caminhão dentro da casa de pesagem (utilizar quando acontecer algum problema na pesagem)
+- Conectar ESP32 com Broker MQTT, e Cloud através da API 
+- Conectar Sistema de Reconhecimento da Placa com Broker MQTT, e Cloud através da API
 
 ## Requisitos não funcionais
 
@@ -51,7 +63,7 @@ Realizar monitaramente e controle de veículos de carga, bem como garantir que o
 
 - **Linguagem de programação Python**: Utilizada para treinar um modelo de reconhecimento de placas de veículos
 - **Linguagem de programação Javascript**: Utilizada para desenvolvimento da aplicação back-end e front-end
-- **Linguagem de programação C++**: Utilizada para funções no microcontrolador
+- **Linguagem de programação C++**: Utilizada para Firmware no microcontrolador
 - **MongoDB**: Banco de dados não relacional utilizado para armazenar todos os dados coletados
 
 ## Descrição arquitetural
@@ -74,9 +86,14 @@ Preview:
 ## Recursos para realização do projeto
 
 - **1 ESP32**
-- **1 web cam**
-- **Plataforma de isopor**
-- **Jumper**
+- **1 Web-Cam**
+- **2 Placas de Isopor**
+- **Jumpers**
 - **Resistores**
 - **Protoboard**
+- **2 Micro Servo SG90.**
+- **2 LEDS Verdes**
+- **2 LEDS Vermelhos**
+- **1 Push Button**
+- **1 Sensor Ultrassônico HC-SR04**
 - **Serviço de hospedagem em cloud**
