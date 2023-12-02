@@ -51,8 +51,7 @@ const getCollection = async (collectionName) => {
 
 /**
  * Obtém todos os motoristas.
- * @method GET
- * @endpoint /drivers
+ * @name GET /drivers
  */
 app.get('/drivers', async (req, res) => {
   const collection = await getCollection(Collections.DRIVERS);
@@ -63,8 +62,7 @@ app.get('/drivers', async (req, res) => {
 
 /**
  * Obtém detalhes de um motorista com um nome específico.
- * @method GET
- * @endpoint /driver/:name
+ * @name GET /drivers/:name
  */
 app.get('/driver/:name', async (req, res) => {
   const { name } = req.params;
@@ -77,8 +75,7 @@ app.get('/driver/:name', async (req, res) => {
 
 /**
  * Verifica a placa e o status de pesagem de um veículo.
- * @method GET
- * @endpoint /verify-plate/:number
+ * @name GET /verify-plate/:number
  */
 app.get('/verify-plate/:number', async (req, res) => {
   const { number } = req.params;
@@ -114,8 +111,7 @@ app.get('/verify-plate/:number', async (req, res) => {
 
 /**
  * Salva o peso total de uma pesagem.
- * @method POST
- * @endpoint /save_full_load_weight/:weighingId
+ * @name POST /save_full_load_weight/:weighingId
  */
 app.post('/save_full_load_weight/:weighingId', async (req, res) => {
   const { weighingId } = req.params;
@@ -132,8 +128,7 @@ app.post('/save_full_load_weight/:weighingId', async (req, res) => {
 
 /**
  * Verifica o peso de descarga de uma pesagem.
- * @method POST
- * @endpoint /verify_weight/:weighingId
+ * @name POST /verify_weight/:weighingIdT
  */
 app.post('/verify_weight/:weighingId', async (req, res) => {
   const { weighingId } = req.params;
@@ -150,8 +145,7 @@ app.post('/verify_weight/:weighingId', async (req, res) => {
 
 /**
  * Retorna informações simuladas sobre uma placa de veículo.
- * @method GET
- * @endpoint /license-plate-info
+ * @name GET /license-plate-info
  */
 app.get('/license-plate-info', async (req, res) => {
   res.json({
@@ -164,8 +158,7 @@ const amountToCents = (amount) => amount * 100;
 
 /**
  * Retorna informações simuladas sobre uma fatura.
- * @method GET
- * @endpoint /invoice-info
+ * @name GET /invoice-info
  */
 app.get('/invoice-info', async (req, res) => {
   res.json({
@@ -183,8 +176,7 @@ app.get('/invoice-info', async (req, res) => {
 
 /**
  * Obtém as últimas pesagens.
- * @method GET
- * @endpoint /weighings
+ * @name GET /weighings
  */
 app.get('/weighings', async (req, res) => {
   const collection = await getCollection(Collections.WEIGHINGS);
@@ -199,8 +191,7 @@ app.get('/weighings', async (req, res) => {
 
 /**
  * Cria uma nova pesagem.
- * @method POST
- * @endpoint /create/weighing
+ * @name POST /create/weighingT
  */
 app.post('/create/weighing', async (req, res) => {
   const response = await CreateWeighing(req);
@@ -210,8 +201,7 @@ app.post('/create/weighing', async (req, res) => {
 
 /**
  * Finaliza uma pesagem específica.
- * @method PUT
- * @endpoint /finalize/weighing/:weighingId
+ * @name PUT  /finalize/weighing/:weighingId
  */
 app.put('/finalize/weighing/:weighingId', async (req, res) => {
   const { weighingId } = req.params;
