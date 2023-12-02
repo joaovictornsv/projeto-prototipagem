@@ -51,7 +51,7 @@ Realizar monitaramente e controle de veículos de carga, bem como garantir que o
 
 - **Linguagem de programação Python**: Utilizada para treinar um modelo de reconhecimento de placas de veículos
 - **Linguagem de programação Javascript**: Utilizada para desenvolvimento da aplicação back-end e front-end
-- **Linguagem de programação C**: Utilizada para funções no microcontrolador
+- **Linguagem de programação C++**: Utilizada para funções no microcontrolador
 - **MongoDB**: Banco de dados não relacional utilizado para armazenar todos os dados coletados
 
 ## Descrição arquitetural
