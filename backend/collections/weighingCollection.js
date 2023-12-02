@@ -17,6 +17,11 @@ export const WeighingStatusEnum = {
   WAITING_WEIGHT_CONFIRMATION: 'WAITING_WEIGHT_CONFIRMATION',
 };
 
+/**
+ * Cria uma nova pesagem com base nas informações fornecidas.
+ * @param {object} req - Objeto da requisição contendo dados de driver, license_plate e invoice.
+ * @returns {Promise<object>} - Retorna a nova pesagem criada.
+ */
 export async function CreateWeighing(req) {
   const driver = await getOrCreateDriver({
     name: req.body.driver.name,
@@ -56,6 +61,11 @@ export async function CreateWeighing(req) {
   return await getOrCreateWeighing(weighing);
 }
 
+/**
+ * Obtém ou cria uma nova pesagem com base nas informações fornecidas.
+ * @param {object} weighing - Informações da pesagem a serem verificadas ou inseridas.
+ * @returns {Promise<object>} - Retorna a pesagem encontrada ou a nova pesagem criada.
+ */
 export async function getOrCreateWeighing(weighing) {
   const newWeighing = await collectionWeighings.findOne({
     invoice_barcode: weighing.invoice_barcode,
@@ -68,6 +78,12 @@ export async function getOrCreateWeighing(weighing) {
   return await collectionWeighings.insertOne(weighing);
 }
 
+/**
+ * Salva o peso total de uma pesagem específica.
+ * @param {string} weighingId - ID da pesagem a ser atualizada.
+ * @param {number} measuredWeight - Peso total medido a ser atualizado.
+ * @returns {Promise<boolean>} - Retorna true se a operação for bem-sucedida, caso contrário, false.
+ */
 export async function saveFullLoadWeight(weighingId, measuredWeight) {
   const collection = await getCollection(Collections.WEIGHINGS);
   const weighing = await collection.findOne({ _id: new ObjectId(weighingId) });
@@ -81,6 +97,12 @@ export async function saveFullLoadWeight(weighingId, measuredWeight) {
   return true;
 }
 
+/**
+ * Verifica o peso de descarga de uma pesagem específica e compara com o peso estimado.
+ * @param {string} weighingId - ID da pesagem a ser verificada.
+ * @param {number} measuredUnloadWeight - Peso de descarga medido.
+ * @returns {Promise<boolean>} - Retorna true se a diferença entre os pesos for aceitável, caso contrário, false.
+ */
 export async function verifyUnloadWeight(weighingId, measuredUnloadWeight) {
   const collection = await getCollection(Collections.WEIGHINGS);
   const weighing = await collection.findOne({ _id: new ObjectId(weighingId) });
@@ -103,21 +125,39 @@ export async function verifyUnloadWeight(weighingId, measuredUnloadWeight) {
   return diff <= errorMargin;
 }
 
+/**
+ * Obtém as últimas pesagens.
+ * @returns {Promise<Array>} - Retorna um array com as últimas pesagens.
+ */
 export const getRecentWeighings = async () => {
   const collection = await getCollection(Collections.WEIGHINGS);
   return collection.find().sort({ _id: -1 }).limit(10).toArray();
 };
 
+/**
+ * Obtém os detalhes de uma pesagem específica.
+ * @param {string} weighingId - ID da pesagem a ser obtida.
+ * @returns {Promise<object>} - Retorna os detalhes da pesagem encontrada.
+ */
 export const getWeighingDetails = async (weighingId) => {
   const collection = await getCollection(Collections.WEIGHINGS);
   return collection.findOne({ _id: new ObjectId(weighingId) });
 };
 
+/**
+ * Envia as últimas pesagens para um socket.
+ * @param {object} socket - Objeto de socket para envio das pesagens.
+ */
 export const sendRecentWeighingsToSocket = async (socket) => {
   const weighings = await getRecentWeighings();
   socket.emit('listRecentWeighings', weighings);
 };
 
+/**
+ * Envia os detalhes de uma pesagem específica para um socket.
+ * @param {object} socket - Objeto de socket para envio dos detalhes da pesagem.
+ * @param {string} weighingId - ID da pesagem para obtenção dos detalhes.
+ */
 export const sendWeighingDetailsToSocket = async (socket, weighingId) => {
   const weighing = await getWeighingDetails(weighingId);
   socket.emit('listWeighingDetails', weighing);
