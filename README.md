@@ -54,6 +54,13 @@ Realizar monitaramente e controle de veículos de carga, bem como garantir que o
 - **Linguagem de programação C**: Utilizada para funções no microcontrolador
 - **MongoDB**: Banco de dados não relacional utilizado para armazenar todos os dados coletados
 
+## Descrição arquitetural
+O frontend e o backend estão hospedados na nuvem, no serviço de nuvem da [zCloud](https://zcloud.ws). O MongoDB está hospedado no serviço do MongoDB Atlas.
+Já a parte de reconhecimento visual da placa, o código do microcontrolador e o broker MQTT são executadas numa máquina localmente juntamente do hardware.
+
+<div style="text-align: center;">
+    <img alt="architecture" src="./images/arch.png" />
+</div>
 
 ## Recursos para realização do projeto
 
