@@ -62,6 +62,10 @@ Já a parte de reconhecimento visual da placa, o código do microcontrolador e o
     <img alt="architecture" src="./images/arch.png" />
 </div>
 
+## Esquemático do projeto
+
+O esquemático pode ser acessado por meio do link: [aqui](https://wokwi.com/projects/383030914485118977)
+
 ## Recursos para realização do projeto
 
 - **1 ESP32**
