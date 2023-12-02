@@ -62,6 +62,15 @@ Já a parte de reconhecimento visual da placa, o código do microcontrolador e o
     <img alt="architecture" src="./images/arch.png" />
 </div>
 
+## Esquemático eletrônico
+Para a construção do esquemático foi utilizado a plataform Wokwi.
+Clique [aqui](https://wokwi.com/projects/383032811868797953) para visualizar a página do circuito do projeto.
+
+Preview:
+<div style="text-align: center;">
+    <img alt="circuit" src="./images/circuit.png" />
+</div>
+
 ## Recursos para realização do projeto
 
 - **1 ESP32**
