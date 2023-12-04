@@ -30,7 +30,7 @@ O protótipo visa auxiliar no processo de coleta de informações de placas de v
 
 ## Funcionamento
 
-A tecnologia possibilitará realizar a detecção de placas por meio de uma camêra. Após a leitura e captura da placa, os dados são enviados para um servidor web mediante o protocolo MQTT, onde será confirmado os dados lidos e então é realizado a pesagem do veículo de carga e identificação do motorista. Com todos os dados coletados, é então feita a verificação se os dados cadastrados estão de acordo. Caso positivo, o fluxo é liberado, caso contrário, segue-se os protocolos policiais.
+A tecnologia possibilitará realizar a detecção de placas por meio de uma camêra. Após a leitura e captura da placa, os dados são enviados para um servidor web mediante o protocolo HTTP, onde será confirmado os dados lidos e então é realizado a pesagem do veículo de carga e identificação do motorista. Com todos os dados coletados, é então feita a verificação se os dados cadastrados estão de acordo. Caso positivo, o fluxo é liberado, caso contrário, segue-se os protocolos policiais.
 
 ## Justificativa
 
