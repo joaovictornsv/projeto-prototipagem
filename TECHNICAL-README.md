@@ -10,6 +10,7 @@ Antes de fazer da aplicação, você precisará instalar:
 
 **Back-end**:
 - Instalação do [Node.js](https://nodejs.org/en)
+- Instalação do [MongoDB](https://www.mongodb.com/docs/manual/installation/)
 - Definir variáveis de ambiente
 
 ```shell
@@ -31,6 +32,12 @@ Nos arquivos `utils/api.js` e `utils/websocket.js` alterar as URLs da api e do w
 
 **Para detecção de placas de veículos**
 - Instalação do [Python](https://www.python.org/)
+
+**Nota**:
+
+Para que as bibliotecas funcionem corretamente, recomendamos que utilize a versão 3.11.5 (intale clicando nesse [link](https://www.python.org/downloads/release/python-3115/)). Isso porque a biblioteca ultralytics é melhor compatível com essa versão
+
+Além disso, todo o projeto foi pensado para rodar localmente em sistema linux. Caso encontre algum erro, leia a seção [Seção de possíveis erros](#erros-e-soluções)
 
 ## Executando
 
@@ -61,7 +68,7 @@ Para ter acesso a documentação dos endpoints, execute o comando abaixo:
 $ npx jsdoc ./ ./collections
 ```
 
-A documentação estará em um arquivo index.html dentro de uma pasta out
+A documentação estará em um arquivo index.html dentro de uma pasta out.
 
 **Broker MQTT**
 
@@ -124,3 +131,11 @@ const char* mqttServer = "IP_BROKER_MQTT";
 - React.js
 - MongoDB
 - Mosquitto
+
+### Erros e soluções
+
+- [Instalação do ultralytics](https://stackoverflow.com/questions/75356032/error-in-installing-ultralytics-in-python-as-they-have-conflicting-dependencies)
+- [(Github Issue) AttributeError: module 'PIL.Image' has no attribute 'ANTIALIAS' #1077
+](https://github.com/JaidedAI/EasyOCR/issues/1077)
+- [(Stackoverflow) AttributeError: module 'PIL.Image' has no attribute 'ANTIALIAS'](https://stackoverflow.com/questions/76616042/attributeerror-module-pil-image-has-no-attribute-antialias)
+- [No module named 'ultralytics.utils' #3856](https://github.com/ultralytics/ultralytics/issues/3856)
