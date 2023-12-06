@@ -22,6 +22,8 @@ O fluxo de pesagem passa a ser o seguinte:
 5. Caso não haja nada suspeito e tudo esteja conforme, o automóvel será carregado e poderá seguir viagem
 6. Caso contrário, motorista será encaminhado e veículo é detido
 
+Confira uma demo do projeto em execução clicando [aqui](https://www.youtube.com/watch?v=y9jM6nrJ87I). 
+
 ## Objetivo
 
 Por meio do desenvolvimento desta aplicação, espera-se obter a automação parcial/total das etapas de verificação de veículos de carga.
@@ -73,6 +75,9 @@ Já a parte de reconhecimento visual da placa, o código do microcontrolador e o
 <div style="text-align: center;">
     <img alt="architecture" src="./images/arch.png" />
 </div>
+
+## Como executar o projeto
+Caso deseje executar o projeto localmente na sua máquina, siga os passos descritos na nossa [documentação técnica](./TECHNICAL-README.md).
 
 ## Esquemático eletrônico
 Para a construção do esquemático foi utilizado a plataform Wokwi.
