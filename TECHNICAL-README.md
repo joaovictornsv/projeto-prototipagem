@@ -2,8 +2,6 @@
 
 Leia sobre nosso projeto clicando [aqui](./README.md)
 
-Acesso nosso projeto em: [sistema de detecção de placas](https://jifxwj4sxqahefy5o-projetos-faculdade.svc.zcloud.ws/)
-
 ## Pré-requisitos
 
 Antes de fazer da aplicação, você precisará instalar:
