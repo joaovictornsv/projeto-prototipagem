@@ -97,3 +97,8 @@ Preview:
 - **1 Push Button**
 - **1 Sensor Ultrassônico HC-SR04**
 - **Serviço de hospedagem em cloud**
+
+## Vídeo demonstração
+
+![](./video/video_demo.MOV)
+
