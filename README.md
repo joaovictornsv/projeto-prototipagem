@@ -105,5 +105,5 @@ Preview:
 
 ## Vídeo demonstração
 
-![](./video/video_demo.MOV)
+Clique [aqui](https://www.youtube.com/watch?v=OpqCC4ew-GU) para ter acesso ao vídeo de demonstração
 
